@@ -1,0 +1,19 @@
+version: '3'
+
+# documentation at docker hub
+# https://hub.docker.com/_/mongo
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:4
+#    environment:
+#      - MONGO_INITDB_DATABASE=petclinic
+#      - MONGO_INITDB_ROOT_USERNAME=petclinic
+#      - MONGO_INITDB_ROOT_PASSWORD=petclinic
+    ports:
+    - '27017-27019:27017-27019'
+    volumes:
+    - mongo-data:/data/db
+
+volumes:
+  mongo-data:

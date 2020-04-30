@@ -1,0 +1,5 @@
+spring:
+  data:
+    mongodb:
+      database: pet-clinic
+      uri: mongodb://localhost/pet-clinic
