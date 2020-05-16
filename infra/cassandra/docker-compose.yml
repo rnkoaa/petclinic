@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  cassandra:
+    image: cassandra:3
+    container_name: pc_cassandra
+    ports:
+    - 9042:9042
+    volumes:
+      - pc_cassandra_data:/var/lib/cassandra
+
+volumes:
+  pc_cassandra_data:
