@@ -1,5 +1,7 @@
-package com.tgt.petclinic.petclinic
+package com.tgt.petclinic.visit
 
+import com.tgt.petclinic.common.model.BaseEntity
+import com.tgt.petclinic.owner.Pet
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDateTime

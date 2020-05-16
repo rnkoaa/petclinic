@@ -1,4 +1,4 @@
-package com.tgt.petclinic.petclinic
+package com.tgt.petclinic.common.model
 
 open class Person(id: String?,
                   firstName: String,

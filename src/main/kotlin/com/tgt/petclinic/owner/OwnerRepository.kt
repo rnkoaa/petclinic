@@ -1,4 +1,4 @@
-package com.tgt.petclinic.petclinic
+package com.tgt.petclinic.owner
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 

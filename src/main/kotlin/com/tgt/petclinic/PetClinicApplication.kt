@@ -1,4 +1,4 @@
-package com.tgt.petclinic.petclinic
+package com.tgt.petclinic
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

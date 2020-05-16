@@ -1,9 +1,9 @@
-package com.tgt.petclinic.petclinic
+package com.tgt.petclinic
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest
+//@SpringBootTest
 class PetClinicApplicationTests {
 
 	@Test
