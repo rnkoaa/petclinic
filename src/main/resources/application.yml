@@ -1,5 +1,11 @@
+#spring:
+#  data:
+#    mongodb:
+#      database: pet-clinic
+#      uri: mongodb://localhost/pet-clinic
+
 spring:
   data:
-    mongodb:
-      database: pet-clinic
-      uri: mongodb://localhost/pet-clinic
+    cassandra:
+      keyspaceName: petclinic
+      port: 9042
