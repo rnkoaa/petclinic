@@ -17,6 +17,7 @@
 * Add Vet
     * first_name
     * last_name
+    * telephone
     * specialty
 * Get Vets
 * Get Vet    
