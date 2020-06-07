@@ -22,7 +22,7 @@ class OwnerController {
     @PostMapping(value = ["", "/"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
 //    @PreAuthorize("hasRole('ADMIN')")
-    fun create(@Valid @RequestBody request: OwnerRequest): Mono<OwnerResponse> {
+    fun create(/*@Valid*/ @RequestBody request: OwnerRequest): Mono<OwnerResponse> {
 //        logger.info("create product {}", request.toString())
         val productId = request.id ?: 0L
         if (productId <= 0L) {
