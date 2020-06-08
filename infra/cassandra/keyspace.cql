@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS petclinic.owner_by_telephone
     last_name  TEXT,
     address    TEXT,
     city       TEXT,
-    PRIMARY KEY(telephone, first_name, last_name)
-) WITH CLUSTERING ORDER BY (first_name ASC, last_name ASC);
+    PRIMARY KEY(telephone, first_name, last_name, id)
+) WITH CLUSTERING ORDER BY (first_name ASC, last_name ASC, id ASC);
 
 CREATE TABLE IF NOT EXISTS petclinic.owner
 (
@@ -41,9 +41,7 @@ CREATE TABLE IF NOT EXISTS petclinic.pet_by_owner
 (
     owner_id   UUID,
     pet_id     UUID,
-    first_name TEXT,
-    last_name  TEXT,
-    pet_name   TEXT,
+    name       TEXT,
     birth_date date,
     pet_type   petclinic.pet_type,
     PRIMARY KEY ( owner_id, pet_id )

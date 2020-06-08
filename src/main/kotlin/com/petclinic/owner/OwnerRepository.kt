@@ -5,9 +5,6 @@ import org.springframework.data.cassandra.repository.ReactiveCassandraRepository
 import reactor.core.publisher.Mono
 import java.util.*
 
-
-//import org.springframework.data.mongodb.repository.ReactiveMongoRepository
-//
 interface OwnerRepository : ReactiveCassandraRepository<Owner, UUID> {
 
 }

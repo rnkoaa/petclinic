@@ -10,5 +10,5 @@ abstract class BaseEntity(open var id: UUID?) {
     }
 }
 
-abstract class NamedEntity(@PrimaryKey override var id: UUID?, name: String) : BaseEntity(id)
+abstract class NamedEntity(override var id: UUID?, open var name: String) : BaseEntity(id)
 

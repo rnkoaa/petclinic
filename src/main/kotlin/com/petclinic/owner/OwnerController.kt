@@ -1,49 +1,79 @@
 package com.petclinic.owner
 
 import com.petclinic.common.adapter.InvalidProductIdException
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.util.*
 
 @RestController
-@RequestMapping("/petclinic/v1/owner")
-class OwnerController {
-    /**
-     * This is a private endpoint by which we can seed data for testing purposes.
-     *
-     * @param request a valid {@link ProductRequest} object containing a valid productId and {@link ProductPrice}
-     *                       that can be used to persist a product price in our system. In order to call this
-     *                       endpoint, the principal should have a role of admin.
-     * @return http 201 response code if the request was successful.
-     * Additionally, the request body is returned to the client
-     */
+@RequestMapping("/petclinic/v1")
+class OwnerController(val ownerService: OwnerService, val petService: PetService) {
+    companion object {
+        private val logger = LoggerFactory.getLogger("ProductController")
+    }
+
+
+
 //    @Operation(hidden = true, summary = "Ignore this method from being publicly documented")
-    @PostMapping(value = ["", "/"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(value = ["owner", "/owner"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
 //    @PreAuthorize("hasRole('ADMIN')")
-    fun create(/*@Valid*/ @RequestBody request: OwnerRequest): Mono<OwnerResponse> {
-//        logger.info("create product {}", request.toString())
-        val productId = request.id ?: 0L
-        if (productId <= 0L) {
-            return Mono.error(InvalidProductIdException())
-        }
-//
-//        val product = Product(
-//                id = request.id,
-//                name = request.name ?: "",
-//                currentPrice = request.currentPrice)
-//
-//        return productService.exists(productId)
-//                .flatMap { res ->
-//                    if (!res) {
-//                        val toBeSavedProduct = Product(productId, request.name, request.currentPrice)
-//                        productService.save(toBeSavedProduct)
-//                    } else {
-//                        Mono.error<Throwable>(DuplicateKeyException("product exists"))
-//                    }
-//                }
-//                .flatMap { Mono.just(ProductResponse(product.id, product.name, product.currentPrice)) }
+    fun create(/*@Valid*/ @RequestBody request: CreateOwnerRequest): Mono<OwnerResponse> {
+        logger.info("create product {}", request.toString())
 
+        val owner = createOwner(request)
+        println(owner)
+
+        return ownerService.save(owner)
+                .map { res -> createOwnerResponse(res) }
+    }
+
+    private fun createOwner(request: CreateOwnerRequest): Owner {
+        return Owner(request.id, request.lastName, request.firstName, request.telephone, request.address, request.city)
+    }
+
+    private fun createOwnerResponse(owner: Owner): OwnerResponse {
+        return OwnerResponse(owner)
+    }
+
+
+//    @Operation(hidden = true, summary = "Ignore this method from being publicly documented")
+    @GetMapping(value = ["owners", "owners/"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    fun findOwners(): Flux<OwnerResponse> {
+
+        return ownerService.findAll()
+                .map { o -> createOwnerResponse(o) }
+    }
+
+//    @Operation(hidden = true, summary = "Ignore this method from being publicly documented")
+    @GetMapping(value = ["owner", "owner/"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
+            .APPLICATION_JSON_VALUE])
+    fun findOwner(@RequestParam("telephone") telephone: String?): Mono<OwnerResponse> {
+        if (telephone != null) {
+            return ownerService.findByTelephone(telephone)
+                    .map { res -> createOwnerResponse(res) }
+        }
+        return Mono.empty()
+    }
+
+//    @Operation(hidden = true, summary = "Ignore this method from being publicly documented")
+    @GetMapping(value = ["owner/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
+            .APPLICATION_JSON_VALUE])
+    fun findOwnerById(@PathVariable("id") id: String, @RequestParam("include_pets") includePets: Boolean?): Mono<OwnerResponse> {
+        var includePetB = false
+        includePets?.let{
+            includePetB = it
+        }
+        if(includePetB) {
+            val findByOwner = petService.findByOwner(id)
+            val pets = findByOwner.toIterable().toList()
+            print("Pets: ${pets.size}")
+//            findByOwner.
+        }
+        return ownerService.findById(id).map { res -> createOwnerResponse(res) }
     }
 }
