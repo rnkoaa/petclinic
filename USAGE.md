@@ -1,8 +1,9 @@
 # USAGE
 
-* Get Owners
-* Get Owner
-* Add owner
+* Get Owners  ✅
+* Get Owner by id ✅
+* Get Owner by telephone ✅
+* Add owner 
     * first_name
     * last_name
     * telephone
@@ -17,6 +18,7 @@
 * Add Vet
     * first_name
     * last_name
+    * telephone
     * specialty
 * Get Vets
 * Get Vet    
