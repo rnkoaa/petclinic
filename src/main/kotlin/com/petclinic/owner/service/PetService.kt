@@ -1,5 +1,9 @@
-package com.petclinic.owner
+package com.petclinic.owner.service
 
+import com.petclinic.owner.model.Pet
+import com.petclinic.owner.model.PetByOwner
+import com.petclinic.owner.repository.PetByOwnerRepository
+import com.petclinic.owner.repository.PetRepository
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono

@@ -1,4 +1,4 @@
-package com.petclinic.owner
+package com.petclinic.owner.model
 
 import com.petclinic.common.model.NamedEntity
 import com.petclinic.visit.Visit
@@ -10,7 +10,7 @@ import org.springframework.data.annotation.Transient
 import java.util.*
 
 @UserDefinedType("pet_type")
-class PetType(val name: String)
+data class PetType(val name: String)
 
 @Table(value = "pet")
 data class Pet(@PrimaryKey override var id: UUID?,

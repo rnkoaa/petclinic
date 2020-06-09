@@ -1,9 +1,11 @@
-package com.petclinic.owner
+package com.petclinic.owner.repository
 
+import com.petclinic.owner.model.Pet
+import com.petclinic.owner.model.PetByOwner
+import com.petclinic.owner.model.PetByOwnerKey
 import org.springframework.data.cassandra.repository.Query
 import org.springframework.data.cassandra.repository.ReactiveCassandraRepository
 import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 import java.util.*
 
 interface PetRepository : ReactiveCassandraRepository<Pet, UUID> {

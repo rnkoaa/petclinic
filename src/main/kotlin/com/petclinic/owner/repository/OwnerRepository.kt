@@ -1,5 +1,8 @@
-package com.petclinic.owner
+package com.petclinic.owner.repository
 
+import com.petclinic.owner.model.Owner
+import com.petclinic.owner.model.OwnerByTelephone
+import com.petclinic.owner.model.OwnerByTelephoneKey
 import org.springframework.data.cassandra.repository.Query
 import org.springframework.data.cassandra.repository.ReactiveCassandraRepository
 import reactor.core.publisher.Mono
