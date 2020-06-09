@@ -1,10 +1,13 @@
-package com.petclinic.owner
+package com.petclinic.owner.service
 
+import com.petclinic.owner.model.Owner
+import com.petclinic.owner.model.OwnerByTelephone
+import com.petclinic.owner.repository.OwnerByTelephoneRepository
+import com.petclinic.owner.repository.OwnerRepository
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import reactor.kotlin.core.publisher.switchIfEmpty
 import java.util.*
 
 interface OwnerService {

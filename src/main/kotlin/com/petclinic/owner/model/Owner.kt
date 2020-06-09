@@ -1,10 +1,11 @@
-package com.petclinic.owner
+package com.petclinic.owner.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.petclinic.common.model.Person
+import com.petclinic.owner.adapter.PetResponse
 import org.springframework.data.annotation.PersistenceConstructor
 import org.springframework.data.annotation.Transient
 import org.springframework.data.cassandra.core.cql.Ordering
@@ -81,7 +82,8 @@ data class OwnerResponse(
         val lastName: String,
         val telephone: String,
         var address: String?,
-        var city: String?) {
+        var city: String?,
+        var pets: Set<PetResponse> = setOf()) {
 
     constructor(owner: Owner) : this(owner.id,
             owner.firstName,
@@ -89,4 +91,12 @@ data class OwnerResponse(
             owner.telephone,
             owner.address,
             owner.city)
+
+    constructor(owner: Owner, pets: Set<PetResponse>) : this(owner.id,
+            owner.firstName,
+            owner.lastName,
+            owner.telephone,
+            owner.address,
+            owner.city,
+            pets)
 }

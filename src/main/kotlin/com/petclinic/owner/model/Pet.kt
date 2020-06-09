@@ -1,4 +1,4 @@
-package com.petclinic.owner
+package com.petclinic.owner.model
 
 import com.petclinic.common.model.NamedEntity
 import com.petclinic.visit.Visit

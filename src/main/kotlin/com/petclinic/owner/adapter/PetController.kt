@@ -1,10 +1,14 @@
-package com.petclinic.owner
+package com.petclinic.owner.adapter
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.petclinic.common.adapter.NotFoundException
+import com.petclinic.owner.model.Pet
+import com.petclinic.owner.model.PetType
+import com.petclinic.owner.service.OwnerService
+import com.petclinic.owner.service.PetService
 import com.petclinic.visit.Visit
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
@@ -28,7 +32,7 @@ class PetController(val petService: PetService, val ownerService: OwnerService) 
     }
 
     @PostMapping(value = ["/owner/{id}/pet"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun createPet(@RequestBody request: PetRequest, @PathVariable("id") id: String): Mono<PetResponse> {
+    fun createPet(@Valid @RequestBody request: PetRequest, @PathVariable("id") id: String): Mono<PetResponse> {
 
         val requestItem = if (request.ownerId == null) request.copy(ownerId = UUID.fromString(id)) else request
         val pet = requestItem.toPet()
@@ -116,8 +120,8 @@ data class PetOwnerRequest(var id: UUID?, val telephone: String)
 data class PetResponse(val id: String?,
                        val ownerId: String?,
                        val birthDate: LocalDate?,
-                       var type: PetType,
+                       var type: String,
                        var name: String,
                        var visits: Set<Visit> = setOf()) {
-    constructor(pet: Pet) : this(pet.id?.toString(), pet.ownerId.toString(), pet.birthDate, pet.type, pet.name, pet.visits)
+    constructor(pet: Pet) : this(pet.id?.toString(), pet.ownerId.toString(), pet.birthDate, pet.type.name, pet.name, pet.visits)
 }
