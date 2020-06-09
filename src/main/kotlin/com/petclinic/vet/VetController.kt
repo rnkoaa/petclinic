@@ -25,6 +25,9 @@ class VetController(val vetService: VetService, val specialtyService: SpecialtyS
                 .map { createVetResponse(it) }
     }
 
+    // fun findById
+    // fun add Specialty By Id
+
     @PostMapping("/vet", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
             .APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
