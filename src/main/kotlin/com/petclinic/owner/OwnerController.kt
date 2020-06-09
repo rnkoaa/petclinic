@@ -16,19 +16,25 @@ class OwnerController(val ownerService: OwnerService, val petService: PetService
         private val logger = LoggerFactory.getLogger("ProductController")
     }
 
-
-
-//    @Operation(hidden = true, summary = "Ignore this method from being publicly documented")
+    //    @Operation(hidden = true, summary = "Ignore this method from being publicly documented")
     @PostMapping(value = ["owner", "/owner"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
-//    @PreAuthorize("hasRole('ADMIN')")
     fun create(/*@Valid*/ @RequestBody request: CreateOwnerRequest): Mono<OwnerResponse> {
-        logger.info("create product {}", request.toString())
 
         val owner = createOwner(request)
-        println(owner)
 
         return ownerService.save(owner)
+                .map { res -> createOwnerResponse(res) }
+    }
+
+    @PostMapping(value = ["owners", "/owners"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
+            .APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.CREATED)
+    fun bulkCreate(/*@Valid*/ @RequestBody request: List<CreateOwnerRequest>): Flux<OwnerResponse> {
+
+        val owners = request.map { req -> createOwner(req) }
+        return Flux.fromIterable(owners)
+                .flatMap { owner -> ownerService.save(owner) }
                 .map { res -> createOwnerResponse(res) }
     }
 
@@ -41,7 +47,7 @@ class OwnerController(val ownerService: OwnerService, val petService: PetService
     }
 
 
-//    @Operation(hidden = true, summary = "Ignore this method from being publicly documented")
+    //    @Operation(hidden = true, summary = "Ignore this method from being publicly documented")
     @GetMapping(value = ["owners", "owners/"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun findOwners(): Flux<OwnerResponse> {
 
@@ -49,7 +55,7 @@ class OwnerController(val ownerService: OwnerService, val petService: PetService
                 .map { o -> createOwnerResponse(o) }
     }
 
-//    @Operation(hidden = true, summary = "Ignore this method from being publicly documented")
+    //    @Operation(hidden = true, summary = "Ignore this method from being publicly documented")
     @GetMapping(value = ["owner", "owner/"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
             .APPLICATION_JSON_VALUE])
     fun findOwner(@RequestParam("telephone") telephone: String?): Mono<OwnerResponse> {
@@ -60,15 +66,15 @@ class OwnerController(val ownerService: OwnerService, val petService: PetService
         return Mono.empty()
     }
 
-//    @Operation(hidden = true, summary = "Ignore this method from being publicly documented")
+    //    @Operation(hidden = true, summary = "Ignore this method from being publicly documented")
     @GetMapping(value = ["owner/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
             .APPLICATION_JSON_VALUE])
     fun findOwnerById(@PathVariable("id") id: String, @RequestParam("include_pets") includePets: Boolean?): Mono<OwnerResponse> {
         var includePetB = false
-        includePets?.let{
+        includePets?.let {
             includePetB = it
         }
-        if(includePetB) {
+        if (includePetB) {
             val findByOwner = petService.findByOwner(id)
             val pets = findByOwner.toIterable().toList()
             print("Pets: ${pets.size}")

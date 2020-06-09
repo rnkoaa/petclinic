@@ -10,8 +10,10 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.lang.IllegalArgumentException
 import java.time.LocalDate
 import java.util.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/petclinic/v1")
@@ -40,7 +42,46 @@ class PetController(val petService: PetService, val ownerService: OwnerService) 
                 }
     }
 
-    fun createPetResponse(pet: Pet): PetResponse {
+    @PostMapping(value = ["/owner/pet"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    fun createPetWithOwner(@Valid @RequestBody request: PetRequest): Mono<PetResponse> {
+        when {
+            request.ownerId != null -> {
+                val assignedOwner = ownerService.find(request.ownerId!!)
+                        .switchIfEmpty(Mono.error(NotFoundException("owner with telephone ${request.owner?.telephone} for pet was not " +
+                                "found")))
+                        .map { o -> request.toPet(o.id!!) }
+                return savePet(assignedOwner)
+            }
+            request.owner != null && request.owner!!.telephone != "" -> {
+                val assignedOwner = ownerService.findByTelephone(request.owner?.telephone!!)
+                        .switchIfEmpty(Mono.error(NotFoundException("owner with telephone ${request.owner?.telephone} for pet was not " +
+                                "found")))
+                        .map { o -> request.toPet(o.id!!) }
+                return savePet(assignedOwner)
+            }
+            request.owner != null && request.owner!!.id != null -> {
+                val assignedOwner = ownerService.find(request.owner?.id!!)
+                        .switchIfEmpty(Mono.error(NotFoundException("owner with telephone ${request.owner?.telephone} for pet was not " +
+                                "found")))
+                        .map { o -> request.toPet(o.id!!) }
+                return savePet(assignedOwner)
+            }
+            else -> {
+                println("Can't process Illegal request")
+                return Mono.error(IllegalArgumentException("owner id or owner is required with valid telephone."))
+            }
+        }
+    }
+
+    private fun savePet(assignedOwner: Mono<Pet>): Mono<PetResponse> {
+        return assignedOwner
+                .flatMap { o ->
+                    petService.save(o)
+                }
+                .map { p -> PetResponse(p) }
+    }
+
+    private fun createPetResponse(pet: Pet): PetResponse {
         return PetResponse(pet)
     }
 }
@@ -53,14 +94,21 @@ data class PetRequest(var id: UUID?,
                       val birthDate: LocalDate,
                       var type: PetType,
                       var name: String,
+                      var owner: PetOwnerRequest?,
                       var visits: Set<Visit> = setOf()) {
 
     fun toPet(): Pet {
-        return Pet(id, ownerId!!, birthDate, type, name, visits)
+        val petId = id ?: UUID.randomUUID()
+        return Pet(petId, ownerId!!, birthDate, type, name, visits)
     }
 
-
+    fun toPet(ownerId: UUID): Pet {
+        val petId = id ?: UUID.randomUUID()
+        return Pet(petId, ownerId, birthDate, type, name, visits)
+    }
 }
+
+data class PetOwnerRequest(var id: UUID?, val telephone: String)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)

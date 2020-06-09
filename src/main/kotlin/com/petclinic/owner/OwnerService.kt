@@ -12,6 +12,7 @@ interface OwnerService {
     fun save(owner: Owner): Mono<Owner>
     fun findByTelephone(telephone: String): Mono<Owner>
     fun findById(id: String): Mono<Owner>
+    fun find(id: UUID): Mono<Owner>
     fun exists(id: String): Mono<Boolean>
 }
 
@@ -60,6 +61,10 @@ class OwnerServiceImpl(val ownerRepository: OwnerRepository,
 
     override fun findById(id: String): Mono<Owner> {
         return ownerRepository.findById(UUID.fromString(id))
+    }
+
+    override fun find(id: UUID): Mono<Owner> {
+        return ownerRepository.findById(id)
     }
 
     /**
