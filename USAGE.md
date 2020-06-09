@@ -3,15 +3,15 @@
 * Get Owners  ✅
 * Get Owner by id ✅
 * Get Owner by telephone ✅
-* Add owner 
+* Add owner ✅ 
     * first_name
     * last_name
     * telephone
     * address
     * city
     * pets
-* Get Pets for owner
-* Add Pet to Owner
+* Get Pets for owner ✅
+* Add Pet to Owner ✅
     * name
     * birth_date
     * pet_type
