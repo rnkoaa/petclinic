@@ -16,5 +16,5 @@ interface VetRepository : ReactiveCassandraRepository<Vet, UUID> {
 interface VetByTelephoneRepository : ReactiveCassandraRepository<VetByTelephone, VetByTelephoneKey> {
 
     @Query("select * from vet_by_telephone where telephone = ?0")
-    fun findByTelephone(telephone: String): Mono<OwnerByTelephone>
+    fun findByTelephone(telephone: String): Mono<VetByTelephone>
 }

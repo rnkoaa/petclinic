@@ -11,6 +11,17 @@ import reactor.core.publisher.Mono
 import java.util.*
 import javax.validation.Valid
 
+fun createSpecialtyFromRequest(specialtyRequest: SpecialtyRequest): Specialty {
+    if (specialtyRequest.id != null) {
+        return Specialty(specialtyRequest.id, specialtyRequest.name)
+    }
+    return Specialty(UUID.randomUUID(), specialtyRequest.name)
+}
+
+fun createSpecialtyResponse(specialty: Specialty): SpecialtyResponse {
+    return SpecialtyResponse(specialty.id!!, specialty.name)
+}
+
 @RestController
 @RequestMapping("/petclinic/v1")
 class SpecialtyController(val specialtyService: SpecialtyService) {
@@ -31,17 +42,6 @@ class SpecialtyController(val specialtyService: SpecialtyService) {
         val specialty = createSpecialtyFromRequest(specialtyRequest)
         return specialtyService.save(specialty)
                 .map { createSpecialtyResponse(it) }
-    }
-
-    fun createSpecialtyFromRequest(specialtyRequest: SpecialtyRequest): Specialty {
-        if (specialtyRequest.id != null) {
-            return Specialty(specialtyRequest.id, specialtyRequest.name)
-        }
-        return Specialty(UUID.randomUUID(), specialtyRequest.name)
-    }
-
-    fun createSpecialtyResponse(specialty: Specialty): SpecialtyResponse {
-        return SpecialtyResponse(specialty.id!!, specialty.name)
     }
 }
 

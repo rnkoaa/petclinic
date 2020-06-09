@@ -10,7 +10,9 @@ import org.springframework.data.cassandra.core.mapping.Table
 import java.util.*
 
 @Table(value = "specialty")
-data class Specialty(@PrimaryKey override var id: UUID?, override var name: String) : NamedEntity(id, name)
+data class Specialty(@PrimaryKey override var id: UUID?, override var name: String) : NamedEntity(id, name) {
+    constructor(specialtyByName: SpecialtyByName) : this(specialtyByName.specialtyByNameKey.id, specialtyByName.specialtyByNameKey.name)
+}
 
 @PrimaryKeyClass
 data class SpecialtyByNameKey(@PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED) val name: String,

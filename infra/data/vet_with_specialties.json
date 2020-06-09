@@ -1,0 +1,48 @@
+[
+  {
+    "first_name": "Henry",
+    "last_name": "Stevens",
+    "telephone": "6082229675",
+    "specialties": [
+      "radiology"
+    ],
+    "email": "ldouglas@petclinic.com"
+  },{
+    "first_name": "Rafael",
+    "last_name": "Ortega",
+    "telephone": "6082229575",
+    "specialties": [
+      "surgery"
+    ],
+    "email": "ldouglas@petclinic.com"
+  },{
+    "first_name": "Linda",
+    "last_name": "Douglas",
+    "telephone": "6082229175",
+    "specialties": [
+      "surgery"
+    ],
+    "email": "ldouglas@petclinic.com"
+  },
+  {
+    "first_name": "Helen",
+    "last_name": "Leary",
+    "telephone": "6082229375",
+    "specialties": [
+      "radiology"
+    ],
+    "email": "hleary@petclinic.com"
+  },
+  {
+    "first_name": "James",
+    "last_name": "Carver",
+    "telephone": "6082229275",
+    "email": "sjenkins@petclinic.com"
+  },
+  {
+    "first_name": "Sharon",
+    "last_name": "Jenkins",
+    "telephone": "6082229475",
+    "email": "sjenkins@petclinic.com"
+  }
+]

@@ -12,6 +12,7 @@ import java.util.*
 interface SpecialtyService {
     fun findAll(): Flux<Specialty>
      fun save(specialty: Specialty): Mono<Specialty>
+    fun findByName(name: String): Mono<Specialty>
 
 }
 
@@ -34,6 +35,11 @@ val specialtyByNameRepository: SpecialtyByNameRepository) : SpecialtyService {
 
                 // if it does not exist, save this owner.
                 .flatMap { saveSpecialty(specialty) }
+    }
+
+    override fun findByName(name: String): Mono<Specialty> {
+       return specialtyByNameRepository.findByName(name)
+               .map { Specialty(it) }
     }
 
     fun saveSpecialty(specialty: Specialty): Mono<Specialty> {
