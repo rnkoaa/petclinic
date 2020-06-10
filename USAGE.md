@@ -21,9 +21,9 @@
     * telephone
     * specialty
 * Get Vets ✅
-* Add Specialty to Vet
-* Get Vet    
-* Add visit
+* Add Specialty to Vet ✅
+* Get Vet ✅
+* Add visit  ✅
     * pet
     * visit_date
     * description

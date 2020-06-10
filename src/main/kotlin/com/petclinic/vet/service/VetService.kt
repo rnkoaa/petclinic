@@ -1,5 +1,6 @@
 package com.petclinic.vet.service
 
+import com.petclinic.owner.model.Pet
 import com.petclinic.vet.repository.VetByTelephoneRepository
 import com.petclinic.vet.repository.VetRepository
 import com.petclinic.vet.model.Vet
@@ -14,6 +15,7 @@ interface VetService {
     fun findAll(): Flux<Vet>
     fun save(vet: Vet): Mono<Vet>
     fun findById(id: String): Mono<Vet>
+    fun find(id: UUID): Mono<Vet>
     fun exists(name: String): Mono<Boolean>
     fun update(vet: Vet): Mono<Vet>
 }
@@ -42,6 +44,10 @@ class VetServiceImpl(val vetRepository: VetRepository,
 
     override fun findById(id: String): Mono<Vet> {
         return vetRepository.findById(UUID.fromString(id))
+    }
+
+    override fun find(id: UUID): Mono<Vet> {
+       return vetRepository.findById(id)
     }
 
     fun saveVetInternal(vet: Vet): Mono<Vet> {

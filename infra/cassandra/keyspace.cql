@@ -83,3 +83,13 @@ CREATE TABLE IF NOT EXISTS petclinic.vet_by_telephone
     email      TEXT,
     PRIMARY KEY (telephone, first_name, last_name, id)
 ) WITH CLUSTERING ORDER BY (first_name ASC, last_name ASC, id ASC);
+
+CREATE TABLE IF NOT EXISTS petclinic.visit
+(
+    id          UUID PRIMARY KEY,
+    date        timestamp,
+    pet_id      UUID,
+    owner_id    UUID,
+    vet_id      UUID,
+    description TEXT
+);
