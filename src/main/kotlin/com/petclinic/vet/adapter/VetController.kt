@@ -1,11 +1,14 @@
-package com.petclinic.vet
+package com.petclinic.vet.adapter
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.petclinic.common.adapter.NotFoundException
 import com.petclinic.vet.model.Vet
 import com.petclinic.vet.model.VetSpecialty
+import com.petclinic.vet.service.SpecialtyService
+import com.petclinic.vet.service.VetService
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
@@ -25,6 +28,39 @@ class VetController(val vetService: VetService, val specialtyService: SpecialtyS
                 .map { createVetResponse(it) }
     }
 
+    @GetMapping("/vets/{id}", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
+            .APPLICATION_JSON_VALUE])
+    fun findById(@PathVariable("id") id: String): Mono<VetResponse> {
+        return vetService.findById(id)
+                .switchIfEmpty(Mono.error(NotFoundException("There is no vet with the id $id")))
+                .map { createVetResponse(it) }
+    }
+
+    fun vetExists(id: String): Mono<Boolean> {
+        return vetService.findById(id).map { true }.switchIfEmpty(Mono.just(false))
+    }
+
+    @PutMapping("/vets/{id}/specialty", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
+            .APPLICATION_JSON_VALUE])
+    fun addSpecialtyToVet(@PathVariable("id") id: String, @Valid @RequestBody specialtyRequest: SpecialtyRequest): Mono<VetResponse> {
+        val specialty = createSpecialtyFromRequest(specialtyRequest)
+        val specialtyMono = if (specialty.isNew()) specialtyService.save(specialty) else Mono.just(specialty)
+
+        return Mono.just(id)
+                .filterWhen { item ->
+                    vetExists(item) //.map { e -> e }
+                }
+                .switchIfEmpty(Mono.error(NotFoundException("There is no vet with id $id")))
+                .flatMap { vetService.findById(id) }
+                .zipWith(specialtyMono)
+                .map {
+                    val vet = it.t1
+                    val vSpecialty = it.t2
+                    vet.copy(specialties = vet.specialties + VetSpecialty(vSpecialty.id, vSpecialty.name))
+                }
+                .flatMap { vetService.update(it) }
+                .map { createVetResponse(it) }
+    }
     // fun findById
     // fun add Specialty By Id
 

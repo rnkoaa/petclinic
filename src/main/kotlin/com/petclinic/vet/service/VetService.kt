@@ -1,6 +1,7 @@
-package com.petclinic.vet
+package com.petclinic.vet.service
 
-import com.petclinic.vet.model.SpecialtyByName
+import com.petclinic.vet.repository.VetByTelephoneRepository
+import com.petclinic.vet.repository.VetRepository
 import com.petclinic.vet.model.Vet
 import com.petclinic.vet.model.VetByTelephone
 import org.springframework.dao.DuplicateKeyException
@@ -12,11 +13,14 @@ import java.util.*
 interface VetService {
     fun findAll(): Flux<Vet>
     fun save(vet: Vet): Mono<Vet>
+    fun findById(id: String): Mono<Vet>
+    fun exists(name: String): Mono<Boolean>
+    fun update(vet: Vet): Mono<Vet>
 }
 
 @Service
 class VetServiceImpl(val vetRepository: VetRepository,
-val vetByTelephoneRepository: VetByTelephoneRepository) : VetService {
+                     val vetByTelephoneRepository: VetByTelephoneRepository) : VetService {
     override fun findAll(): Flux<Vet> {
         return vetRepository.findAll()
     }
@@ -36,7 +40,11 @@ val vetByTelephoneRepository: VetByTelephoneRepository) : VetService {
                 .flatMap { saveVetInternal(vet) }
     }
 
-    fun saveVetInternal(vet: Vet) : Mono<Vet> {
+    override fun findById(id: String): Mono<Vet> {
+        return vetRepository.findById(UUID.fromString(id))
+    }
+
+    fun saveVetInternal(vet: Vet): Mono<Vet> {
         // assign id if there is no id for this user.
         val toSave = if (!vet.isNew()) vet else vet.copy(id = UUID.randomUUID())
 
@@ -44,12 +52,16 @@ val vetByTelephoneRepository: VetByTelephoneRepository) : VetService {
                 .then(vetRepository.save(toSave))
     }
 
-    fun exists(name: String): Mono<Boolean> {
+    override fun exists(name: String): Mono<Boolean> {
         return vetByTelephoneRepository.findByTelephone(name)
                 .map {
                     true
                 }
                 .switchIfEmpty(Mono.just(false))
+    }
+
+    override fun update(vet: Vet): Mono<Vet> {
+        return vetRepository.save(vet)
     }
 
 }

@@ -1,8 +1,9 @@
-package com.petclinic.vet
+package com.petclinic.vet.adapter
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.petclinic.vet.model.Specialty
+import com.petclinic.vet.service.SpecialtyService
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*

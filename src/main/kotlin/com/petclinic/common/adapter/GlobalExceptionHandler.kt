@@ -39,8 +39,7 @@ private fun wrapResponse(objectMapper: ObjectMapper, ex: Throwable, exchange: Se
 @Order(-2)
 class GlobalExceptionHandler(val objectMapper: ObjectMapper) : WebExceptionHandler {
     override fun handle(exchange: ServerWebExchange, ex: Throwable): Mono<Void> {
-        if (ex is ProductNameNotFoundException || ex is ProductPriceNotFoundException
-                || ex is ProductNotFoundException) {
+        if (ex is NotFoundException ) {
             exchange.response.headers
                     .add("Content-Type", "application/json")
             exchange.response.statusCode = HttpStatus.NOT_FOUND

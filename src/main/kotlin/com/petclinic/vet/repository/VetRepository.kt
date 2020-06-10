@@ -1,4 +1,4 @@
-package com.petclinic.vet
+package com.petclinic.vet.repository
 
 import com.petclinic.owner.model.OwnerByTelephone
 import com.petclinic.vet.model.Vet

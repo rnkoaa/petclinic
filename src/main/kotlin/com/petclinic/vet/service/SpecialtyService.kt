@@ -1,6 +1,7 @@
-package com.petclinic.vet
+package com.petclinic.vet.service
 
-import com.petclinic.owner.model.OwnerByTelephone
+import com.petclinic.vet.repository.SpecialtyByNameRepository
+import com.petclinic.vet.repository.SpecialtyRepository
 import com.petclinic.vet.model.Specialty
 import com.petclinic.vet.model.SpecialtyByName
 import org.springframework.dao.DuplicateKeyException
@@ -18,7 +19,7 @@ interface SpecialtyService {
 
 @Service
 class SpecialtyServiceImpl(val specialtyRepository: SpecialtyRepository,
-val specialtyByNameRepository: SpecialtyByNameRepository) : SpecialtyService {
+                           val specialtyByNameRepository: SpecialtyByNameRepository) : SpecialtyService {
     override fun findAll(): Flux<Specialty> {
         return specialtyRepository.findAll()
     }
