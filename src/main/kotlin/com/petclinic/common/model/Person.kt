@@ -5,5 +5,5 @@ import java.util.*
 
 open class Person(override var id: UUID?,
                   @Column("first_name") open var firstName: String,
-                  @Column("first_name") open var lastName: String
+                  @Column("last_name") open var lastName: String
 ) : BaseEntity(id)

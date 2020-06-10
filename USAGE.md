@@ -15,12 +15,13 @@
     * name
     * birth_date
     * pet_type
-* Add Vet
+* Add Vet ✅
     * first_name
     * last_name
     * telephone
     * specialty
-* Get Vets
+* Get Vets ✅
+* Add Specialty to Vet
 * Get Vet    
 * Add visit
     * pet

@@ -16,15 +16,23 @@ CREATE TABLE IF NOT EXISTS petclinic.specialty
     name TEXT
 );
 
+-- Table to hold list of specialties for reference
+CREATE TABLE IF NOT EXISTS petclinic.specialty_by_name
+(
+    name TEXT,
+    id   UUID,
+    PRIMARY KEY ( name, id )
+) WITH CLUSTERING ORDER BY (ID ASC);
+
 CREATE TABLE IF NOT EXISTS petclinic.owner_by_telephone
 (
     telephone  TEXT,
-    id         UUID ,
+    id         UUID,
     first_name TEXT,
     last_name  TEXT,
     address    TEXT,
     city       TEXT,
-    PRIMARY KEY(telephone, first_name, last_name, id)
+    PRIMARY KEY (telephone, first_name, last_name, id)
 ) WITH CLUSTERING ORDER BY (first_name ASC, last_name ASC, id ASC);
 
 CREATE TABLE IF NOT EXISTS petclinic.owner
@@ -60,6 +68,18 @@ CREATE TABLE IF NOT EXISTS petclinic.vet
 (
     id          UUID PRIMARY KEY,
     first_name  TEXT,
+    telephone   TEXT,
+    email       TEXT,
     last_name   TEXT,
     specialties FROZEN<SET<petclinic.vet_specialty>>
 );
+
+CREATE TABLE IF NOT EXISTS petclinic.vet_by_telephone
+(
+    id         UUID,
+    first_name TEXT,
+    last_name  TEXT,
+    telephone  TEXT,
+    email      TEXT,
+    PRIMARY KEY (telephone, first_name, last_name, id)
+) WITH CLUSTERING ORDER BY (first_name ASC, last_name ASC, id ASC);
