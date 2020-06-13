@@ -18,6 +18,7 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/petclinic/v1")
 class OwnerController(val ownerService: OwnerService, val petService: PetService) {
+
     companion object {
         private val logger = LoggerFactory.getLogger("ProductController")
     }
@@ -25,7 +26,7 @@ class OwnerController(val ownerService: OwnerService, val petService: PetService
     @Operation(description = "Creates an owner in the platform if the owner does not exist. The required" +
             "unique key is a telephone. No two owners will have the same phonenumber.",
             summary = "create an owner")
-    @PostMapping(value = ["owner", "/owner"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(value = ["owner"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@Valid @RequestBody request: CreateOwnerRequest): Mono<OwnerResponse> {
         val owner = createOwner(request)
@@ -36,11 +37,10 @@ class OwnerController(val ownerService: OwnerService, val petService: PetService
     @Operation(description = "Creates a list of owners in the platform if the owner does not exist. The required" +
             "unique key is a telephone. No two owners will have the same phonenumber.",
             summary = "create an owner")
-    @PostMapping(value = ["owners", "/owners"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
+    @PostMapping(value = ["owners"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
             .APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     fun bulkCreate(@Valid @RequestBody request: List<CreateOwnerRequest>): Flux<OwnerResponse> {
-
         val owners = request.map { req -> createOwner(req) }
         return Flux.fromIterable(owners)
                 .flatMap { owner -> ownerService.save(owner) }
@@ -50,7 +50,7 @@ class OwnerController(val ownerService: OwnerService, val petService: PetService
 
     @Operation(description = "returns all owners that are available in the system",
             summary = "find all owners")
-    @GetMapping(value = ["owners", "owners/"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(value = ["owners"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun findOwners(): Flux<OwnerResponse> {
         return ownerService.findAll()
                 .map { o -> createOwnerResponse(o) }
@@ -58,7 +58,7 @@ class OwnerController(val ownerService: OwnerService, val petService: PetService
 
     @Operation(description = "find an owner by the telephone",
             summary = "find owner by telephone")
-    @GetMapping(value = ["owner", "owner/"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
+    @GetMapping(value = ["owner"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
             .APPLICATION_JSON_VALUE])
     fun findOwner(@RequestParam("telephone") telephone: String?): Mono<OwnerResponse> {
         if (telephone != null) {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.petclinic.vet.model.Specialty
 import com.petclinic.vet.service.SpecialtyService
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
@@ -27,6 +28,7 @@ fun createSpecialtyResponse(specialty: Specialty): SpecialtyResponse {
 @RequestMapping("/petclinic/v1")
 class SpecialtyController(val specialtyService: SpecialtyService) {
 
+    @Operation(summary = "find all specialties", description = "find all available specialties available.")
     @GetMapping(value = ["/specialties"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
             .APPLICATION_JSON_VALUE])
     fun findAll(): Flux<SpecialtyResponse> {
@@ -36,6 +38,7 @@ class SpecialtyController(val specialtyService: SpecialtyService) {
                 }
     }
 
+    @Operation(summary = "create a specialty", description = "create a specialty if does not exist.")
     @PostMapping(value = ["/specialty"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
             .APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)

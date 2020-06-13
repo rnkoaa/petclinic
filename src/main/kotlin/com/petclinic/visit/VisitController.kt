@@ -27,33 +27,27 @@ import javax.validation.Valid
 @RequestMapping("/petclinic/v1")
 class VisitController(val visitService: VisitService,
                       val petService: PetService,
-                      val ownerService: OwnerService,
-                      val vetService: VetService
+                      val ownerService: OwnerService
 ) {
-    @GetMapping(value = ["visits", "visits/"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(value = ["visits"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun findVisits(): Flux<Visit> {
-//    fun findVisits(): Flux<VisitResponse> {
-
         return visitService.findAll()
 //                .map { o -> createVisitResponse(o) }
     }
 
-    @PostMapping(value = ["visits", "visits/"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
+    @PostMapping(value = ["visits"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
             .APPLICATION_JSON_VALUE])
     fun createVisit(@Valid @RequestBody requestBody: VisitRequest): Mono<CreateVisitResponse> {
         val ownerMaybe = ownerService.find(requestBody.owner)
                 .switchIfEmpty(Mono.error(NotFoundException("owner with id ${requestBody.owner} does not exist")))
         val petMaybe = petService.find(requestBody.pet)
                 .switchIfEmpty(Mono.error(NotFoundException("owner with id ${requestBody.owner} does not exist")))
-//        val vetMaybe = vetService.find(requestBody.vet)
-//                .switchIfEmpty(Mono.error(NotFoundException("vet with id ${requestBody.vet} does not exist")))
 
         // combine all these sources if they are all available to create a visit.
-        return Mono.zip(petMaybe, ownerMaybe/*, vetMaybe*/)
+        return Mono.zip(petMaybe, ownerMaybe)
                 .map { t ->
                     val pet = t.t1
                     val owner = t.t2
-//                    val vet = t.t3
 
                     val id = requestBody.id ?: UUID.randomUUID()
                     val visitDate = requestBody.date ?: LocalDate.now()

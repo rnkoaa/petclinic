@@ -9,6 +9,7 @@ import com.petclinic.vet.model.Vet
 import com.petclinic.vet.model.VetSpecialty
 import com.petclinic.vet.service.SpecialtyService
 import com.petclinic.vet.service.VetService
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
@@ -17,10 +18,12 @@ import reactor.core.publisher.Mono
 import java.util.*
 import javax.validation.Valid
 
+
 @RestController
 @RequestMapping("/petclinic/v1")
 class VetController(val vetService: VetService, val specialtyService: SpecialtyService) {
 
+    @Operation(summary = "find all vets", description = "find all vets available without any filters")
     @GetMapping("/vets", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
             .APPLICATION_JSON_VALUE])
     fun findAll(): Flux<VetResponse> {
@@ -28,6 +31,7 @@ class VetController(val vetService: VetService, val specialtyService: SpecialtyS
                 .map { createVetResponse(it) }
     }
 
+    @Operation(summary = "find a vet by id", description = "find vet by id.")
     @GetMapping("/vets/{id}", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
             .APPLICATION_JSON_VALUE])
     fun findById(@PathVariable("id") id: String): Mono<VetResponse> {
@@ -36,13 +40,12 @@ class VetController(val vetService: VetService, val specialtyService: SpecialtyS
                 .map { createVetResponse(it) }
     }
 
-    fun vetExists(id: String): Mono<Boolean> {
-        return vetService.findById(id).map { true }.switchIfEmpty(Mono.just(false))
-    }
-
+    @Operation(summary = "add a specialty to a vet", description = "add a specialty to vet if the vet does not have " +
+            "the specialty")
     @PutMapping("/vets/{id}/specialty", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
             .APPLICATION_JSON_VALUE])
-    fun addSpecialtyToVet(@PathVariable("id") id: String, @Valid @RequestBody specialtyRequest: SpecialtyRequest): Mono<VetResponse> {
+    fun addSpecialtyToVet(@PathVariable("id") id: String,
+                          @Valid @RequestBody specialtyRequest: SpecialtyRequest): Mono<VetResponse> {
         val specialty = createSpecialtyFromRequest(specialtyRequest)
         val specialtyMono = if (specialty.isNew()) specialtyService.save(specialty) else Mono.just(specialty)
 
@@ -64,6 +67,7 @@ class VetController(val vetService: VetService, val specialtyService: SpecialtyS
     // fun findById
     // fun add Specialty By Id
 
+    @Operation(summary = "create a vet", description = "create a new vet in the system")
     @PostMapping("/vet", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
             .APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
@@ -114,6 +118,11 @@ class VetController(val vetService: VetService, val specialtyService: SpecialtyS
         }
         return VetResponse(vet)
     }
+
+    fun vetExists(id: String): Mono<Boolean> {
+        return vetService.findById(id).map { true }.switchIfEmpty(Mono.just(false))
+    }
+
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
