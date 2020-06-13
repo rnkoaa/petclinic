@@ -1,0 +1,13 @@
+0bd94755-9711-43f8-be94-bbbecb4c2136,1995-09-04,Max,cf5a98ef-f6c4-4cb3-b54d-8df9f45e3bad,{name: 'cat'}
+ff0ac665-394d-44b1-90e4-0085ca45bc57,2000-03-09,Freddy,2f4a61d7-ff6f-4395-8cfa-32f4ff7283bf,{name: 'bird'}
+e8edc112-03ec-4cf6-a288-75fdfb3d259b,2000-03-07,Jewel,953ede57-2737-4ea2-a9a3-1f639297de0f,{name: 'dog'}
+f7ce05a2-bc32-4e25-a5cc-8a25579806f3,1997-02-24,Mulligan,2c34bbc8-2072-4e83-927a-c1a47961cc5c,{name: 'dog'}
+20a6fadb-d54a-472e-8e3e-4d0caeb821f4,2002-06-08,Sly,86885291-c536-4107-954f-324266e8afba,{name: 'cat'}
+5e9c37fe-42f9-4394-bdc6-cf6e2511eeb0,2002-08-06,Basil,969538f8-5aae-4dd6-8acc-6b7362d3e7d8,{name: 'hamster'}
+c9a1d98c-2b2a-4c25-9704-147e80adb396,2000-11-30,Iggy,a3e2de8d-d227-4697-b1d2-7c280d1bc6ff,{name: 'lizard'}
+ed375cd0-2a88-4e67-b34b-e82ae141ddab,1995-09-04,Samantha,cf5a98ef-f6c4-4cb3-b54d-8df9f45e3bad,{name: 'cat'}
+60fe6fb4-2890-4acb-a37e-c76d9760ecb2,2000-06-24,Lucky,86885291-c536-4107-954f-324266e8afba,{name: 'dog'}
+2e756bc8-8ac0-4664-b48f-520ae627cf35,2000-09-07,Leo,9249313b-ddaa-4ed3-9e78-6dc01b7537bd,{name: 'cat'}
+4a5cb166-8c8f-48ca-be56-1889f7cf4053,2001-04-17,Rosy,953ede57-2737-4ea2-a9a3-1f639297de0f,{name: 'dog'}
+12bd0450-aaf4-49cb-bc86-4fa91d96823e,2000-01-20,George,c08b2942-21f9-4460-9b9e-a0fa4e59f74d,{name: 'snake'}
+e5080c94-9f83-42f3-83aa-66f3e284e8a1,1999-08-06,Lucky,5ef309fa-2953-4535-bba8-c02f34022a17,{name: 'bird'}

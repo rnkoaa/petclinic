@@ -10,6 +10,7 @@ import com.petclinic.owner.model.PetType
 import com.petclinic.owner.service.OwnerService
 import com.petclinic.owner.service.PetService
 import com.petclinic.visit.Visit
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
@@ -23,17 +24,16 @@ import javax.validation.Valid
 @RequestMapping("/petclinic/v1")
 class PetController(val petService: PetService, val ownerService: OwnerService) {
 
-    //    @Operation(hidden = true, summary = "Ignore this method from being publicly documented")
+    @Operation(summary = "find all pets for an owner")
     @GetMapping(value = ["/owner/{id}/pets"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun findPetsByOwner(@PathVariable("id") id: String): Flux<PetResponse> {
-
         return petService.findByOwner(id)
                 .map { o -> createPetResponse(o) }
     }
 
+    @Operation(summary = "create a new pet for given the owner's id")
     @PostMapping(value = ["/owner/{id}/pet"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun createPet(@Valid @RequestBody request: PetRequest, @PathVariable("id") id: String): Mono<PetResponse> {
-
         val requestItem = if (request.ownerId == null) request.copy(ownerId = UUID.fromString(id)) else request
         val pet = requestItem.toPet()
 
@@ -46,6 +46,7 @@ class PetController(val petService: PetService, val ownerService: OwnerService) 
                 }
     }
 
+    @Operation(description = "create a new pet. Also create the owner if it does not exist.")
     @PostMapping(value = ["/owner/pet"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun createPetWithOwner(@Valid @RequestBody request: PetRequest): Mono<PetResponse> {
         when {

@@ -29,13 +29,21 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-data-cassandra-reactive")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
+
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+
+	implementation("org.springdoc:springdoc-openapi-webflux-ui:1.3.8")
+
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
+
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}

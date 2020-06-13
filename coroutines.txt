@@ -1,0 +1,42 @@
+
+fun main() {
+  runBlocking {
+     launch {
+        delay(500) // non-blocking call
+        println("hello ${Thread.currentThread.name}")
+      }
+    println("hello 2)
+
+    //    delay(600) // blocks main thread until it completes.
+  }
+}
+
+suspend fun brew(){
+  delay(500)
+  println("<Task 1> Brew")
+}
+
+// convert a list to flow
+val primesList = listOf(2, 3,5,11,13,17,19,23,29,41).asFlow()
+vla primesList = flowOf(2, 3, 4)
+
+// kotlin flow
+fun sendNumbers() : Flow<In> {
+  return flow {
+    val primesList = listOf(2, 3,5,11,13,17,19,23,29,41)
+    primesList.forEach{
+      delay(it * 100L)
+      emit(it)
+  }
+}
+
+
+fun main() {
+  // coroutine block
+  runBlocking {
+    sendNumbers().collect {
+      println("Received Number $it")
+    }
+    println("Finished Receiving Numbers")
+  }
+}
