@@ -53,6 +53,17 @@ class OwnerController(val ownerService: OwnerService, val petService: PetService
     @GetMapping(value = ["owners"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun findOwners(): Flux<OwnerResponse> {
         return ownerService.findAll()
+                .map { o ->
+                    val pets = petService.findByOwnerId(o.id!!)
+                            .collectList()
+                    Mono.just(o)
+                            .zipWith(pets)
+                            .map { t ->
+                                val petSet = t.t2.toSet()
+                                t.t1.copy(pets = petSet)
+                            }
+                }
+                .flatMap { o -> o }
                 .map { o -> createOwnerResponse(o) }
     }
 

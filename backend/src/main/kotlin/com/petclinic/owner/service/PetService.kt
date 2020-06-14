@@ -11,6 +11,8 @@ import java.util.*
 
 interface PetService {
     fun findByOwner(ownerId: String): Flux<Pet>
+    fun findAll(): Flux<Pet>
+    fun findByOwnerId(ownerId: UUID): Flux<Pet>
     fun save(pet: Pet): Mono<Pet>
     fun find(id: UUID): Mono<Pet>
 }
@@ -22,6 +24,15 @@ class PetServiceImpl(val petRepository: PetRepository, val petByOwnerRepository:
                 .map { p -> Pet(p) }
     }
 
+    override fun findAll(): Flux<Pet> {
+        return petRepository.findAll()
+    }
+
+    override fun findByOwnerId(ownerId: UUID): Flux<Pet> {
+        return petByOwnerRepository.findByOwnerId(ownerId)
+                .map { p -> Pet(p) }
+    }
+
     override fun save(pet: Pet): Mono<Pet> {
         return petByOwnerRepository.save(PetByOwner(pet))
                 .flatMap {
@@ -30,6 +41,6 @@ class PetServiceImpl(val petRepository: PetRepository, val petByOwnerRepository:
     }
 
     override fun find(id: UUID): Mono<Pet> {
-       return petRepository.findById(id)
+        return petRepository.findById(id)
     }
 }

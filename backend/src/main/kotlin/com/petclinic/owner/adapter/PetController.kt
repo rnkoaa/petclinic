@@ -31,6 +31,13 @@ class PetController(val petService: PetService, val ownerService: OwnerService) 
                 .map { o -> createPetResponse(o) }
     }
 
+ @Operation(summary = "find all pets for an owner")
+    @GetMapping(value = ["/pets"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
+    fun findAllPets(): Flux<PetResponse> {
+        return petService.findAll()
+                .map { o -> createPetResponse(o) }
+    }
+
     @Operation(summary = "create a new pet for given the owner's id")
     @PostMapping(value = ["/owner/{id}/pet"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun createPet(@Valid @RequestBody request: PetRequest, @PathVariable("id") id: String): Mono<PetResponse> {

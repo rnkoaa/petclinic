@@ -1,25 +1,44 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import NavBar from './components/NavBar'
+import Dashboard from './components/Dashboard'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import MainDashboard from './components/MainDashboard';
+import OwnersDashboard from './presentation/OwnersDashboard'
+import PetsDashboard from './presentation/PetsDashboard'
+import VetsDashboard from './presentation/VetsDashboard'
+import VisitsDashboard from './presentation/VisitsDashboard'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <NavBar />
+    {/* // <Dashboard /> */}
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <MainDashboard />
+        </Route>
+        <Route exact path="/owners">
+          <OwnersDashboard />
+        </Route>
+        <Route exact path="/pets">
+          <PetsDashboard />
+        </Route>
+        <Route exact path="/vets">
+          <VetsDashboard />
+        </Route>
+        <Route exact path="/visits">
+          <VisitsDashboard />
+        </Route>
+      </Switch>
+    </Router>
+    </>
   );
 }
 

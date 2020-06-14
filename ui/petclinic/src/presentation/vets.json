@@ -1,0 +1,60 @@
+[
+    {
+      "id": "44d570a0-62eb-4bfc-9518-3d315f51db3b",
+      "first_name": "Sharon",
+      "last_name": "Jenkins"
+    },
+    {
+      "id": "def77a6a-dd35-45ae-96c0-7db456616afa",
+      "first_name": "Linda",
+      "last_name": "Douglas",
+      "specialties": [
+        {
+          "id": "064eaa1b-79a0-40c8-b6fa-afbf09b638e1",
+          "name": "surgery"
+        },
+        {
+          "id": "d9ab4009-9dd8-4296-bbda-1734fcf07c45",
+          "name": "dentistry"
+        }
+      ]
+    },
+    {
+      "id": "cf2536bb-66f6-45e8-9cc1-a962d39bf606",
+      "first_name": "Rafael",
+      "last_name": "Ortega",
+      "specialties": [
+        {
+          "id": "064eaa1b-79a0-40c8-b6fa-afbf09b638e1",
+          "name": "surgery"
+        }
+      ]
+    },
+    {
+      "id": "4552d42e-ed95-4e47-9e21-0dacf67382d9",
+      "first_name": "James",
+      "last_name": "Carver"
+    },
+    {
+      "id": "156aa1e6-f722-4dcb-ae37-d2a485d9a569",
+      "first_name": "Helen",
+      "last_name": "Leary",
+      "specialties": [
+        {
+          "id": "14b0759d-30fb-464f-abc3-7514491a5b01",
+          "name": "radiology"
+        }
+      ]
+    },
+    {
+      "id": "294a3653-4a03-4698-a7fe-e4f09674d1b3",
+      "first_name": "Henry",
+      "last_name": "Stevens",
+      "specialties": [
+        {
+          "id": "14b0759d-30fb-464f-abc3-7514491a5b01",
+          "name": "radiology"
+        }
+      ]
+    }
+  ]
