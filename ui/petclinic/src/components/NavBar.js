@@ -1,18 +1,26 @@
 import React from "react";
-import Navbar from "react-bootstrap/Navbar"
-import NavDropdown from "react-bootstrap/NavDropdown"
-import Nav from "react-bootstrap/Nav"
-import Button from "react-bootstrap/Button"
-import FormControl from 'react-bootstrap/FormControl'
-import Form from 'react-bootstrap/Form'
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import Nav from "react-bootstrap/Nav";
+import Button from "react-bootstrap/Button";
+import FormControl from "react-bootstrap/FormControl";
+import Form from "react-bootstrap/Form";
+
+import { LinkContainer } from "react-router-bootstrap";
 const NavBar = () => {
   return (
     <Navbar variant="dark" bg="dark" expand="lg" sticky="top">
-      <Navbar.Brand className="col-md-3 col-lg-2 mr-0 px-3" href="#home">React-Bootstrap</Navbar.Brand>
+      <LinkContainer to="/">
+        <Navbar.Brand className="col-md-3 col-lg-2 mr-0 px-3" href="/">
+          React-Bootstrap
+        </Navbar.Brand>
+      </LinkContainer>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Link href="#home">Home</Nav.Link>
+          <LinkContainer to="/">
+            <Nav.Link href="/">Home</Nav.Link>
+          </LinkContainer>
           <Nav.Link href="#link">Link</Nav.Link>
           <NavDropdown title="Dropdown" id="basic-nav-dropdown">
             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>

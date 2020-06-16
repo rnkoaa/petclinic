@@ -1,0 +1,201 @@
+[
+  {
+    "id": "2af0024a-a892-4cb0-9e49-b7fa64128f31",
+    "first_name": "Coleman",
+    "last_name": "Coleman",
+    "telephone": "6085552654",
+    "address": "105 N. Lake St.",
+    "city": "Monona",
+    "pets": [
+      {
+        "id": "f2cafe9e-ab9c-4fb9-ac3c-ccc95fba6852",
+        "owner_id": "2af0024a-a892-4cb0-9e49-b7fa64128f31",
+        "birth_date": "1995-09-04",
+        "type": "cat",
+        "name": "Max"
+      }
+    ]
+  },
+  {
+    "id": "76efc115-f3ea-4c8e-a340-d594fc1a0121",
+    "first_name": "Schroeder",
+    "last_name": "Schroeder",
+    "telephone": "6085559435",
+    "address": "2749 Blackhawk Trail",
+    "city": "Madison",
+    "pets": [
+      {
+        "id": "522b3dc0-095e-4a4b-b850-84f2f994e78a",
+        "owner_id": "76efc115-f3ea-4c8e-a340-d594fc1a0121",
+        "birth_date": "2000-03-09",
+        "type": "bird",
+        "name": "Freddy"
+      }
+    ]
+  },
+  {
+    "id": "2d09a578-d7f3-4519-85c3-6b5fe801e675",
+    "first_name": "Franklin",
+    "last_name": "Franklin",
+    "telephone": "6085551023",
+    "address": "110 W. Liberty St.",
+    "city": "Madison"
+  },
+  {
+    "id": "33badcbe-a4d6-4d71-8941-2e810360ec2a",
+    "first_name": "Richard",
+    "last_name": "Richard",
+    "telephone": "555-444-0989",
+    "address": "2456 lower c 45",
+    "city": "Minneapolis",
+    "pets": [
+      {
+        "id": "89ca6af4-1c85-4264-9a8b-2b4ef36ee5c6",
+        "owner_id": "33badcbe-a4d6-4d71-8941-2e810360ec2a",
+        "birth_date": "2000-09-07",
+        "type": "cat",
+        "name": "Leo"
+      },
+      {
+        "id": "e6c01ce5-ca8e-4705-91b2-dc0ea16c7f85",
+        "owner_id": "33badcbe-a4d6-4d71-8941-2e810360ec2a",
+        "birth_date": "1995-09-04",
+        "type": "cat",
+        "name": "Samantha"
+      }
+    ]
+  },
+  {
+    "id": "108ab9c9-642d-43de-ab84-21d1bdb0a8ec",
+    "first_name": "Escobito",
+    "last_name": "Escobito",
+    "telephone": "6085557683",
+    "address": "345 Maple St.",
+    "city": "Madison",
+    "pets": [
+      {
+        "id": "b251e742-972c-4b3f-a340-f88cee3b936e",
+        "owner_id": "108ab9c9-642d-43de-ab84-21d1bdb0a8ec",
+        "birth_date": "1997-02-24",
+        "type": "dog",
+        "name": "Mulligan"
+      }
+    ]
+  },
+  {
+    "id": "9bd605b3-928b-4877-9727-f8a079d7ca8b",
+    "first_name": "Davis",
+    "last_name": "Davis",
+    "telephone": "6085551749",
+    "address": "638 Cardinal Ave.",
+    "city": "Sun Prairie",
+    "pets": [
+      {
+        "id": "de4db0f1-8f9b-41c9-ac83-2f79f86f7b60",
+        "owner_id": "9bd605b3-928b-4877-9727-f8a079d7ca8b",
+        "birth_date": "2002-08-06",
+        "type": "hamster",
+        "name": "Basil"
+      }
+    ]
+  },
+  {
+    "id": "093a99b8-f46f-4fd7-aec7-f490570273a3",
+    "first_name": "Davis",
+    "last_name": "Davis",
+    "telephone": "6085553198",
+    "address": "563 Friendly St.",
+    "city": "Windsor",
+    "pets": [
+      {
+        "id": "3e92df2c-0d40-4caf-9982-a03376b75a04",
+        "owner_id": "093a99b8-f46f-4fd7-aec7-f490570273a3",
+        "birth_date": "2000-11-30",
+        "type": "lizard",
+        "name": "Iggy"
+      }
+    ]
+  },
+  {
+    "id": "b7979656-903c-45c0-8c17-a766b81089ed",
+    "first_name": "Rodriguez",
+    "last_name": "Rodriguez",
+    "telephone": "6085558763",
+    "address": "2693 Commerce St.",
+    "city": "McFarland",
+    "pets": [
+      {
+        "id": "9ea0a68f-5a63-4848-b330-99d56a04a82a",
+        "owner_id": "b7979656-903c-45c0-8c17-a766b81089ed",
+        "birth_date": "2001-04-17",
+        "type": "dog",
+        "name": "Rosy"
+      },
+      {
+        "id": "eadc77e1-5911-47e0-840e-0bea8860162e",
+        "owner_id": "b7979656-903c-45c0-8c17-a766b81089ed",
+        "birth_date": "2000-03-07",
+        "type": "dog",
+        "name": "Jewel"
+      }
+    ]
+  },
+  {
+    "id": "6becbeed-0f41-4c3f-bea8-421660cb4f79",
+    "first_name": "Black",
+    "last_name": "Black",
+    "telephone": "6085555387",
+    "address": "1450 Oak Blvd.",
+    "city": "Monona",
+    "pets": [
+      {
+        "id": "be3b1d9c-4785-435c-8c3a-309ccf0df83f",
+        "owner_id": "6becbeed-0f41-4c3f-bea8-421660cb4f79",
+        "birth_date": "1999-08-06",
+        "type": "bird",
+        "name": "Lucky"
+      }
+    ]
+  },
+  {
+    "id": "6adccddd-ae1f-41f1-bf83-5bf46eb3314f",
+    "first_name": "McTavish",
+    "last_name": "McTavish",
+    "telephone": "6085552765",
+    "address": "2387 S. Fair Way",
+    "city": "Madison",
+    "pets": [
+      {
+        "id": "fcd9b3e5-83c5-4cb2-b4da-daabb279c05f",
+        "owner_id": "6adccddd-ae1f-41f1-bf83-5bf46eb3314f",
+        "birth_date": "2000-01-20",
+        "type": "snake",
+        "name": "George"
+      }
+    ]
+  },
+  {
+    "id": "94955e37-e75f-491c-8720-3ae55d8facf8",
+    "first_name": "Estaban",
+    "last_name": "Estaban",
+    "telephone": "6085555487",
+    "address": "2335 Independence La.",
+    "city": "Waunakee",
+    "pets": [
+      {
+        "id": "4db9d695-bdc1-461f-83b5-5f71cfb6ddae",
+        "owner_id": "94955e37-e75f-491c-8720-3ae55d8facf8",
+        "birth_date": "2000-06-24",
+        "type": "dog",
+        "name": "Lucky"
+      },
+      {
+        "id": "d1ff45e9-eff7-4627-a32f-60b93fe7b4ac",
+        "owner_id": "94955e37-e75f-491c-8720-3ae55d8facf8",
+        "birth_date": "2002-06-08",
+        "type": "cat",
+        "name": "Sly"
+      }
+    ]
+  }
+]

@@ -47,7 +47,6 @@ class OwnerController(val ownerService: OwnerService, val petService: PetService
                 .map { res -> createOwnerResponse(res) }
     }
 
-
     @Operation(description = "returns all owners that are available in the system",
             summary = "find all owners")
     @GetMapping(value = ["owners"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
