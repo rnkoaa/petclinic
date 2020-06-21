@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { Link } from "react-router-dom";
-import { owners, OwnersState } from "../store/Store";
+import { owners, OwnersState } from "../../store/Store";
 
 const OwnersListTable = () => {
   const [ownersState, setOwnersState] = useRecoilState(OwnersState);

@@ -1,5 +1,6 @@
 import React from "react";
-
+import MainDashboard from "../../shared/dashboard/MainDashboard";
+import OwnersListTable from "./OwnerListTable";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import face1 from "../../assets/images/faces/face1.jpg";
 import face2 from "../../assets/images/faces/face2.jpg";
@@ -9,22 +10,30 @@ import face5 from "../../assets/images/faces/face5.jpg";
 import face6 from "../../assets/images/faces/face6.jpg";
 import face7 from "../../assets/images/faces/face7.jpg";
 
-const PetDetail = ({ match }) => {
-    const { id } = match.params;
+const OwnersDashboard = () => {
     return (
+        // <MainDashboard>
+        //      <main role="main" className="col-md-9 ml-sm-auto col-lg-10 pt-3 px-md-4">
+        //     <h1 className="h2">Owners</h1>
+        //     <React.Suspense fallback={<div>Loading owners with pets...</div>}>
+        //       <OwnersListTable />
+        //     </React.Suspense>
+        //   </main>
+
+        // </MainDashboard>
         <div>
             <div className="page-header">
-                <h3 className="page-title"> Pet Visit Detail for Pet {id} </h3>
+                <h3 className="page-title"> Current Pet Owners </h3>
                 <nav aria-label="breadcrumb">
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item">
                             <a href="!#" onClick={(event) => event.preventDefault()}>
-                                Pets
+                                Owners
                             </a>
                         </li>
                         {/* <li className="breadcrumb-item active" aria-current="page">
-                Basic tables
-            </li> */}
+                    Basic tables
+                </li> */}
                     </ol>
                 </nav>
             </div>
@@ -132,4 +141,4 @@ const PetDetail = ({ match }) => {
     );
 };
 
-export default PetDetail;
+export default OwnersDashboard;

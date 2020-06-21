@@ -1,2 +1,2 @@
-import VetDetail from './VetDetail'
-export { VetDetail } 
+export {  default as VetDetail } from './VetDetail'
+export {  default as VetsDashboard } from './VetsDashboard'
