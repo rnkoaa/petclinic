@@ -3,12 +3,8 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import MainDashboard from "../dashboard/MainDashboard";
 import { OwnerDetail, OwnersDashboard } from "../../presentation/owner";
 import { PetDetail, PetVisitsDetail, PetsDashboard} from "../../presentation/pets";
-// import {
-  /*PetDetail, 
-  PetVisitsDetail, */
-  // PetsDashboard} from '../../presentation/pets'
-// import {VetDetail, VetsDashboard} from '../../presentation/vet'
-// import {VisitDetail, VisitsDashboard} from '../../presentation/visit'
+import {VetsDashboard, VetDetail} from '../../presentation/vet'
+import {VisitsDashboard, VisitDetail} from '../../presentation/visit'
 const Routes = () => {
     return (
         <Switch>
@@ -18,12 +14,11 @@ const Routes = () => {
             <Route exact path="/pets/:id" component={PetDetail} />
             <Route exact path="/pets/:id/visits" component={PetVisitsDetail} />
             <Route exact path="/pets" component={PetsDashboard} />
-            {/* 
-            
             <Route exact path="/vets/:id" component={VetDetail} />
             <Route exact path="/vets" component={VetsDashboard} />
+
             <Route exact path="/visits/:id" component={VisitDetail} />
-            <Route exact path="/visits" component={VisitsDashboard} /> */}
+            <Route exact path="/visits" component={VisitsDashboard} />
             <Redirect to="/dashboard" />
         </Switch>
     );
