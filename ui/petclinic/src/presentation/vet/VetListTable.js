@@ -14,7 +14,7 @@ const VetsListTable = () => {
 
   return (
     <div className="d-flex flex-wrap table-responsive">
-      <Table responsive className="pt-3">
+      <Table responsive className="table-striped table-bordered pt-3">
         <thead>
           <tr>
             <th>Name</th>
