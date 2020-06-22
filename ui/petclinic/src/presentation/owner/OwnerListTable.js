@@ -10,7 +10,7 @@ const OwnersListTable = () => {
 
   useEffect(() => {
     setOwnersState(ownersList);
-  }, [ownersList]);
+  }, [ownersList, setOwnersState]);
 
   return (
     <div className="d-flex flex-wrap table-responsive">

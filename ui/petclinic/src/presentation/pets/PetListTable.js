@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
 import Table from "react-bootstrap/Table";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { Link } from "react-router-dom";
 import { pets, PetsState } from "../../store/Store";
 
 const PetsListTable = () => {
-  const [petsState, setPetsState] = useRecoilState(PetsState);
+  const  setPetsState = useSetRecoilState(PetsState);
   const petsList = useRecoilValue(pets);
 
   useEffect(() => {
     setPetsState(petsList);
-  }, [petsList]);
+  }, [petsList, setPetsState]);
 
   return (
     <div className="d-flex flex-wrap table-responsive">
