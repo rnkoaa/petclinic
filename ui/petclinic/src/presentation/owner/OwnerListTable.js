@@ -37,7 +37,7 @@ const OwnersListTable = () => {
 
 const OwnerListTableRow = ({ owner }) => {
   const getFullName = () => {
-    return `${owner.first_name} ${owner.last_name}`;
+    return `${capitalize(owner.first_name)} ${capitalize(owner.last_name)}`;
   };
 
   const getPetNames = () => {
