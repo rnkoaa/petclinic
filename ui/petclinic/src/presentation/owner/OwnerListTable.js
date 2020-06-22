@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import Table from "react-bootstrap/Table";
-import { useRecoilState, useRecoilValue } from "recoil";
+import {  useRecoilValue, useSetRecoilState } from "recoil";
 import { Link } from "react-router-dom";
 import { owners, OwnersState } from "../../store/Store";
 
 const OwnersListTable = () => {
-  const [ownersState, setOwnersState] = useRecoilState(OwnersState);
+  const setOwnersState = useSetRecoilState(OwnersState)
   const ownersList = useRecoilValue(owners);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const OwnersListTable = () => {
 
   return (
     <div className="d-flex flex-wrap table-responsive">
-      <Table responsive className="pt-3">
+      <Table responsive className="table-striped table-bordered pt-3">
         <thead>
           <tr>
             <th>Name</th>
