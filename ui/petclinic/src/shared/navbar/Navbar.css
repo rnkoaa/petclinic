@@ -1,0 +1,46 @@
+*:focus {
+  outline: 0 !important;
+}
+
+.navbar.default-layout .navbar-brand-wrapper {
+  background: #143d77;
+  color: #ffffff;
+}
+
+.navbar .navbar-menu-wrapper .navbar-toggler {
+  color: #143d77;
+}
+
+.nav-link p.profile-name {
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+small.designation {
+  color: #ffffff;
+}
+
+.navbar .navbar-menu-wrapper {
+  background-color: #ffffff !important;
+}
+.navbar .navbar-menu-wrapper {
+  color: #000000 !important;
+  padding-left: 15px;
+  padding-right: 15px;
+  width: calc(100% - 255px);
+  height: 63px;
+  background-color: #ffffff !important;
+  box-shadow: 0 4px 16px 0 rgba(167, 175, 183, 0.33);
+  /* background: linear-gradient(120deg, #2f78e9, #128bfc, #18bef1); */
+}
+
+.navbar .navbar-menu-wrapper .navbar-nav .nav-item .nav-link,
+.navbar .navbar-menu-wrapper .navbar-nav .nav-item .nav-link i,
+.navbar .navbar-menu-wrapper .navbar-nav .nav-item .nav-link span {
+  color: #000000;
+}
+
+.navbar .navbar-menu-wrapper .navbar-nav .nav-item .nav-link {
+  font-size: 15px !important;
+  vertical-align: middle;
+}

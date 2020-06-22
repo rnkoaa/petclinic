@@ -1,2 +1,3 @@
-import VisitDetail from './VisitDetail'
-export {VisitDetail} 
+
+export {  default as VisitDetail } from './VisitDetail'
+export {  default as VisitsDashboard } from './VisitsDashboard'

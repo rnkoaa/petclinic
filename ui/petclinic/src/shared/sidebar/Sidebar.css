@@ -1,0 +1,22 @@
+.sidebar {
+  padding: 0px;
+}
+.sidebar .nav-item .nav-link:hover {
+  background-color: #1655ab !important;
+  color: #ffffff;
+}
+
+.sidebar .nav .nav-item .nav-link .menu-title {
+  font-size: 0.9rem;
+}
+.sidebar .nav .nav-item > .nav-link:hover,
+.sidebar .nav .nav-item.active > .nav-link {
+  color: #ffffff;
+}
+.sidebar .nav .nav-item.active > .nav-link:hover .menu-title,
+.sidebar .nav .nav-item.active > .nav-link:hover i {
+  color: #ffffff;
+}
+.sidebar {
+  background: linear-gradient(to top, #143d77, #143d77) !important;
+}
