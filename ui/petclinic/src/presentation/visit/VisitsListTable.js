@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import { VisitState, allVisitState } from "../../store/Store";
+import { VisitState, allVisitState } from "../../store";
 import { Link } from "react-router-dom";
 
 const VisitListTable = () => {
@@ -51,7 +51,7 @@ const VisitListTableRow = ({ visit }) => {
       <td>
         <Link to={`/owners/${visit.ownerId}`}>{visit.ownerId}</Link>
       </td>
-      <td>{visit.description}</td>
+      <td class="text-capitalize">{visit.description}</td>
     </tr>
   );
 };

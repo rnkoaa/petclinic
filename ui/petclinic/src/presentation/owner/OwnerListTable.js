@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import {  useRecoilValue, useSetRecoilState } from "recoil";
 import { Link } from "react-router-dom";
-import { owners, OwnersState } from "../../store/Store";
+import { owners, OwnersState } from "../../store";
+import {capitalize} from '../../utils/strings'
 
 const OwnersListTable = () => {
   const setOwnersState = useSetRecoilState(OwnersState)
@@ -41,7 +42,7 @@ const OwnerListTableRow = ({ owner }) => {
 
   const getPetNames = () => {
     if (owner.pets) {
-      return owner.pets.map((p) => p.name).join(", ");
+      return owner.pets.map((p) => capitalize(p.name)).join(", ");
     }
     return "";
   };

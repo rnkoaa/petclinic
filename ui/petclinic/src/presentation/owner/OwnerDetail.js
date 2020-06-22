@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 // import Dashboard from "../../components/Dashboard";
 
-import { selectedOwnerIDState, selectedOwnerState } from "../../store/Store";
-import { useRecoilState, useRecoilValue } from "recoil";
+// import { selectedOwnerIDState, selectedOwnerState } from "../../store";
+// import { useRecoilState, useRecoilValue } from "recoil";
 
 import ProgressBar from "react-bootstrap/ProgressBar";
 import face1 from "../../assets/images/faces/face1.jpg";
