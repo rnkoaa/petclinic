@@ -13,10 +13,23 @@
 .sidebar .nav .nav-item.active > .nav-link {
   color: #ffffff;
 }
+
+.sidebar .nav .nav-item > .nav-link .menu-title,
+.sidebar .nav .nav-item > .nav-link .menu-title i,
 .sidebar .nav .nav-item.active > .nav-link:hover .menu-title,
 .sidebar .nav .nav-item.active > .nav-link:hover i {
   color: #ffffff;
 }
+
+.sidebar .nav-item.active {
+  background-color: #1655ab !important;
+}
+
 .sidebar {
   background: linear-gradient(to top, #143d77, #143d77) !important;
+}
+
+.sidebar .nav:not(.sub-menu) > .nav-item:hover:not(.nav-profile) > .nav-link {
+  background: #fafbfc;
+  color: #4a4a4a;
 }
