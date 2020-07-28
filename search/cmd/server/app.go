@@ -10,22 +10,45 @@ import (
 	"syscall"
 	"time"
 
+	bleveHttp "github.com/blevesearch/bleve/http"
 	gohandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/rnkoaa/petclinic/pkg/search"
 )
 
+// App - entrypoint to the application
 type App struct {
-	Router *mux.Router
+	DataDir          string
+	Router           *mux.Router
+	Index            search.Index
+	MaxSearchHitSize int
 }
 
-func (a *App) Initializer() {
+// Initializer - Initialize the app object
+func (a *App) Initializer(dataDir string) {
+	if dataDir == "" {
+		dataDir = "./"
+	}
+
+	index := search.Index{
+		Name:      "petclinic.bleve",
+		BatchSize: 1000,
+	}
+	index.Initialize(dataDir, false)
+	a.Index = index
+	bleveHttp.RegisterIndexName("petclinic", index.SearchIndex)
+
 	a.Router = mux.NewRouter()
-	a.Router.HandleFunc("/search", search)
-	a.Router.HandleFunc("/index", indexOwner).Methods("POST")
+	a.Router.HandleFunc("/search", a.searchForItems).Methods("GET")
+	a.Router.HandleFunc("/search", a.processSearch).Methods("POST")
+	a.Router.HandleFunc("/owner", a.createOwner).Methods("POST")
+	a.Router.HandleFunc("/owner/bulk", a.createBulkOwner).Methods("POST")
 	a.Router.HandleFunc("/health", healthz)
 	a.Router.HandleFunc("/version", version)
+
 }
 
+// Run - this runs the app
 func (a *App) Run(addr string) {
 	//
 	// CORS

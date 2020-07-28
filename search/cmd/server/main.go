@@ -18,8 +18,10 @@ func main() {
 
 	// app := ap
 
-	app := App{}
-	app.Initializer()
+	app := App{
+		MaxSearchHitSize: 1000,
+	}
+	app.Initializer("")
 	app.Run(fmt.Sprintf("0.0.0.0:%s", port))
 
 }
