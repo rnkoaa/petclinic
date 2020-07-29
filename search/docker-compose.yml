@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  petclinic-search:
+    image: rnkoaa/petclinic-search:latest
+    ports:
+    - 9090:8080
+    environment:
+    - DATA_DIR=/var/lib/petclinic
+    volumes:
+      - db-data:/var/lib/petclinic
+    networks:
+    - overlay
+
+volumes:
+  db-data:
+networks:
+  overlay:
