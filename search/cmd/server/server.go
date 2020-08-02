@@ -60,8 +60,16 @@ func (s *Server) Initializer(dataDir string) {
 	bleveHttp.RegisterIndexName("petclinic", index.SearchIndex)
 
 	s.Router = mux.NewRouter()
-	s.Router.HandleFunc("/search", s.searchForItems).Methods("GET")
-	s.Router.HandleFunc("/search", s.processSearch).Methods("POST")
+	s.Router.HandleFunc("/", s.searchForItems).Methods("GET")
+	s.Router.HandleFunc("/", s.processSearch).Methods("POST")
+	s.Router.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
+		res := struct {
+			Status string `json:"status"`
+		}{
+			Status: "ok",
+		}
+		respondWithJSON(w, 200, res)
+	})
 	s.Router.HandleFunc("/owner", s.createOwner).Methods("POST")
 	s.Router.HandleFunc("/owner/bulk", s.createBulkOwner).Methods("POST")
 	s.Router.HandleFunc("/health", healthz)
