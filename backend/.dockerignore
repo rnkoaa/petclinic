@@ -1,0 +1,13 @@
+README.md
+USAGE.md
+build/
+!build/libs/*.jar
+build.gradle.kts
+settings.gradle.kts
+gradle.properties
+petclinic.png
+docs
+infra
+src
+gradle/
+.gradle/

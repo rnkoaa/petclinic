@@ -6,12 +6,12 @@ import (
 	"net/http"
 
 	guuid "github.com/google/uuid"
-	"github.com/rnkoaa/petclinic/pkg/search"
+	"github.com/rnkoaa/petclinic/cmd/internal/app"
 )
 
-func (a *App) createOwner(w http.ResponseWriter, r *http.Request) {
+func (s *Server) createOwner(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var o search.Owner
+	var o app.Owner
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&o); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
@@ -29,7 +29,7 @@ func (a *App) createOwner(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf("Indexing Owner with Id: %s\n", o.ID)
 
-	if err := a.Index.IndexOwner(o); err != nil {
+	if err := s.App.IndexOwner(o); err != nil {
 		fmt.Printf("Error %v\n", err)
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
@@ -38,16 +38,16 @@ func (a *App) createOwner(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusCreated, o)
 }
 
-func (a *App) createBulkOwner(w http.ResponseWriter, r *http.Request) {
+func (s *Server) createBulkOwner(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var owners []search.Owner
+	var owners []app.Owner
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&owners); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
 
-	var badOwners = make([]search.Owner, 0, 0)
+	var badOwners = make([]app.Owner, 0, 0)
 	for _, o := range owners {
 		if o.ID == "" {
 			badOwners = append(badOwners, o)
@@ -65,7 +65,7 @@ func (a *App) createBulkOwner(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	errs := a.Index.BulkIndexOwners(owners)
+	errs := s.App.BulkIndexOwners(owners)
 	if len(errs) > 0 {
 		fmt.Printf("There were %d errors during bulk index.\n", len(errs))
 		for _, e := range errs {

@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  cassandra:
+    image: cassandra:3
+    container_name: pc_cassandra
+    networks:
+      - petclinic_net
+    ports:
+      - 9042:9042
+    volumes:
+      - petclinic_api_data:/var/lib/cassandra
+#
+  petclini-api:
+    image: rnkoaa/petclinic-api:latest
+    container_name: petclinic-api
+    environment:
+      - "CONTAINER_MEM_MB=256"
+      - "SPRING_DATA_CASSANDRA_CONSISTENCYLEVEL=local_one"
+      - "SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra"
+    restart: always
+    depends_on:
+      - cassandra
+    networks:
+      - petclinic_net
+    ports:
+      - 9092:8080
+#    healthcheck:
+#      test: "curl localhost:8080/actuator/health"
+#      interval: "60s"
+#      timeout: "3s"
+#      start_period: "5s"
+#      retries: 3
+
+volumes:
+  petclinic_api_data:
+    external: true
+
+networks:
+  petclinic_net:
+    external: true
