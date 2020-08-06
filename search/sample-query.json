@@ -1,0 +1,17 @@
+{
+    "explain": false,
+    "size": 100,
+    "fields": ["id", "first_name", "last_name", "email"],
+    "highlight": {},
+    "query": {
+        "conjuncts": [
+            { "field": "type", "match": "owner" },
+            {
+                "disjuncts": [
+                    { "field": "first_name", "match": "Davis" },
+                    { "field": "last_name", "match": "Davis" }
+                ]
+            }
+        ]
+    }
+}
