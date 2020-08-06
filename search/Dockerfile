@@ -16,7 +16,6 @@ RUN CGO_ENABLED=0 GOOS=linux go build -mod=readonly -v -o petclinic-search ./cmd
 # now create a minimal image that will build the application.
 FROM alpine:3.7
 
-RUN 
 ENV PORT=8080
 ENV DATA_DIR=/var/lib/petclinic
 
