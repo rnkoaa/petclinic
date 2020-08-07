@@ -4,11 +4,14 @@
 #      database: pet-clinic
 #      uri: mongodb://localhost/pet-clinic
 
-spring:
-  data:
-    cassandra:
-      keyspaceName: petclinic
-      sessionName: datacenter1
-      port: 9042
-      contactPoints: localhost
-      localDatacenter: datacenter1
+#spring:
+#  data:
+#    cassandra:
+#      keyspaceName: petclinic
+#      sessionName: datacenter1
+#      port: 9042
+#      contactPoints: localhost
+#      localDatacenter: datacenter1
+gcloud:
+  project:
+    id: ${GCLOUD_PROJECT_ID:spring-petclinic-285614}

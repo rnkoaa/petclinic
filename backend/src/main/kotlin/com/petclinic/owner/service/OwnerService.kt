@@ -1,10 +1,8 @@
 package com.petclinic.owner.service
 
 import com.petclinic.owner.model.Owner
-import com.petclinic.owner.model.OwnerByTelephone
-import com.petclinic.owner.repository.OwnerByTelephoneRepository
+import com.petclinic.common.adapter.DuplicateKeyException
 import com.petclinic.owner.repository.OwnerRepository
-import org.springframework.dao.DuplicateKeyException
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -20,8 +18,7 @@ interface OwnerService {
 }
 
 @Service
-class OwnerServiceImpl(val ownerRepository: OwnerRepository,
-                       val ownerByTelephoneRepository: OwnerByTelephoneRepository) : OwnerService {
+class OwnerServiceImpl(val ownerRepository: OwnerRepository) : OwnerService {
 
     override fun findAll(): Flux<Owner> {
         return ownerRepository.findAll()
@@ -43,7 +40,7 @@ class OwnerServiceImpl(val ownerRepository: OwnerRepository,
                 .filterWhen { o ->
                     telephoneExists(o.telephone).map { e -> !e }
                 }
-                .switchIfEmpty(Mono.error(DuplicateKeyException("There is an owner with the same telephone ${owner.telephone}")))
+                .switchIfEmpty(Mono.error(DuplicateKeyException("There is an owner with the same telephone " +owner.telephone)))
 
                 // if it does not exist, save this owner.
                 .flatMap { saveOwner(owner) }
@@ -53,12 +50,13 @@ class OwnerServiceImpl(val ownerRepository: OwnerRepository,
         // assign id if there is no id for this user.
         val toSave = if (!owner.isNew()) owner else owner.copy(id = UUID.randomUUID())
 
-        return ownerByTelephoneRepository.save(OwnerByTelephone(toSave))
-                .then(ownerRepository.save(toSave))
+//        return ownerByTelephoneRepository.save(OwnerByTelephone(toSave))
+//                .then()
+        return ownerRepository.save(toSave)
     }
 
     override fun findByTelephone(telephone: String): Mono<Owner> {
-        return ownerByTelephoneRepository.findByTelephone(telephone)
+        return ownerRepository.findByTelephone(telephone)
                 .map { o -> Owner(o) }
     }
 
@@ -74,7 +72,7 @@ class OwnerServiceImpl(val ownerRepository: OwnerRepository,
      * Returns true if a telephone already exists by querying the telephone table
      */
     fun telephoneExists(telephone: String): Mono<Boolean> {
-        return ownerByTelephoneRepository.findByTelephone(telephone)
+        return ownerRepository.findByTelephone(telephone)
                 .map {
                     true
                 }

@@ -1,20 +1,37 @@
 package com.petclinic.vet.repository
 
-import com.petclinic.owner.model.OwnerByTelephone
+import com.petclinic.common.repository.BaseRepository
 import com.petclinic.vet.model.Vet
 import com.petclinic.vet.model.VetByTelephone
-import com.petclinic.vet.model.VetByTelephoneKey
-import org.springframework.data.cassandra.repository.Query
-import org.springframework.data.cassandra.repository.ReactiveCassandraRepository
+import org.springframework.stereotype.Component
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.util.*
 
-interface VetRepository : ReactiveCassandraRepository<Vet, UUID> {
-
+interface VetRepository : BaseRepository<Vet, UUID> {
+    fun findByTelephone(telephone: String): Mono<VetByTelephone>
 }
 
-interface VetByTelephoneRepository : ReactiveCassandraRepository<VetByTelephone, VetByTelephoneKey> {
+@Component("vetRepository")
+class VetRepositoryImpl : VetRepository {
+    override fun findByTelephone(telephone: String): Mono<VetByTelephone> {
+        TODO("Not yet implemented")
+    }
 
-    @Query("select * from vet_by_telephone where telephone = ?0")
-    fun findByTelephone(telephone: String): Mono<VetByTelephone>
+    override fun save(item: Vet): Mono<Vet> {
+        TODO("Not yet implemented")
+    }
+
+    override fun save(item: List<Vet>): Flux<Vet> {
+        TODO("Not yet implemented")
+    }
+
+    override fun findById(id: UUID): Mono<Vet> {
+        TODO("Not yet implemented")
+    }
+
+    override fun findAll(): Flux<Vet> {
+        TODO("Not yet implemented")
+    }
+
 }

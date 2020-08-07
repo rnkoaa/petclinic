@@ -1,8 +1,6 @@
 package com.petclinic.owner.service
 
 import com.petclinic.owner.model.Pet
-import com.petclinic.owner.model.PetByOwner
-import com.petclinic.owner.repository.PetByOwnerRepository
 import com.petclinic.owner.repository.PetRepository
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
@@ -18,9 +16,9 @@ interface PetService {
 }
 
 @Service
-class PetServiceImpl(val petRepository: PetRepository, val petByOwnerRepository: PetByOwnerRepository) : PetService {
+class PetServiceImpl(val petRepository: PetRepository) : PetService {
     override fun findByOwner(ownerId: String): Flux<Pet> {
-        return petByOwnerRepository.findByOwnerId(UUID.fromString(ownerId))
+        return petRepository.findByOwnerId(UUID.fromString(ownerId))
                 .map { p -> Pet(p) }
     }
 
@@ -29,15 +27,12 @@ class PetServiceImpl(val petRepository: PetRepository, val petByOwnerRepository:
     }
 
     override fun findByOwnerId(ownerId: UUID): Flux<Pet> {
-        return petByOwnerRepository.findByOwnerId(ownerId)
+        return petRepository.findByOwnerId(ownerId)
                 .map { p -> Pet(p) }
     }
 
     override fun save(pet: Pet): Mono<Pet> {
-        return petByOwnerRepository.save(PetByOwner(pet))
-                .flatMap {
-                    petRepository.save(pet)
-                }
+        return petRepository.save(pet)
     }
 
     override fun find(id: UUID): Mono<Pet> {

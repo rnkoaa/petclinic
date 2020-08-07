@@ -28,8 +28,11 @@ dependencies {
 
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
-	implementation("org.springframework.boot:spring-boot-starter-data-cassandra-reactive")
+//	implementation("org.springframework.boot:spring-boot-starter-data-cassandra-reactive")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
+
+
+	implementation("com.google.cloud:google-cloud-firestore:1.35.2")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 

@@ -1,19 +1,37 @@
 package com.petclinic.vet.repository
 
+import com.petclinic.common.repository.BaseRepository
 import com.petclinic.vet.model.Specialty
-import com.petclinic.vet.model.SpecialtyByName
-import com.petclinic.vet.model.SpecialtyByNameKey
-import org.springframework.data.cassandra.repository.Query
-import org.springframework.data.cassandra.repository.ReactiveCassandraRepository
+import com.petclinic.vet.model.VetSpecialty
+import org.springframework.stereotype.Component
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.util.*
 
-interface SpecialtyRepository : ReactiveCassandraRepository<Specialty, UUID> {
-
+interface SpecialtyRepository : BaseRepository<Specialty, UUID> {
+    fun findByName(name: String): Mono<Specialty>
 }
 
-interface SpecialtyByNameRepository : ReactiveCassandraRepository<SpecialtyByName, SpecialtyByNameKey> {
+@Component("specialtyRepository")
+class SpecialtyRepositoryImpl : SpecialtyRepository {
+    override fun findByName(name: String): Mono<Specialty> {
+        TODO("Not yet implemented")
+    }
 
-    @Query("select * from petclinic.specialty_by_name where name = ?0")
-    fun findByName(name: String): Mono<SpecialtyByName>
+    override fun save(item: Specialty): Mono<Specialty> {
+        TODO("Not yet implemented")
+    }
+
+    override fun save(item: List<Specialty>): Flux<Specialty> {
+        TODO("Not yet implemented")
+    }
+
+    override fun findById(id: UUID): Mono<Specialty> {
+        TODO("Not yet implemented")
+    }
+
+    override fun findAll(): Flux<Specialty> {
+        TODO("Not yet implemented")
+    }
+
 }

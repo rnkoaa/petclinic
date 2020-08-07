@@ -1,4 +1,6 @@
 package com.petclinic.common.adapter
 
-class DuplicateKeyException {
+import java.lang.RuntimeException
+
+class DuplicateKeyException(override val message: String): RuntimeException(message) {
 }
