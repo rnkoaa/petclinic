@@ -9,33 +9,31 @@ import java.util.*
 
 interface PetService {
     fun findByOwner(ownerId: String): Flux<Pet>
-    fun findAll(): Flux<Pet>
+//    fun findAll(own): Flux<Pet>
     fun findByOwnerId(ownerId: UUID): Flux<Pet>
     fun save(pet: Pet): Mono<Pet>
-    fun find(id: UUID): Mono<Pet>
+//    fun find(id: UUID): Mono<Pet>
 }
 
 @Service
 class PetServiceImpl(val petRepository: PetRepository) : PetService {
     override fun findByOwner(ownerId: String): Flux<Pet> {
         return petRepository.findByOwnerId(UUID.fromString(ownerId))
-                .map { p -> Pet(p) }
     }
 
-    override fun findAll(): Flux<Pet> {
-        return petRepository.findAll()
-    }
+//    override fun findAll(): Flux<Pet> {
+//        return petRepository.findAll()
+//    }
 
     override fun findByOwnerId(ownerId: UUID): Flux<Pet> {
         return petRepository.findByOwnerId(ownerId)
-                .map { p -> Pet(p) }
     }
 
     override fun save(pet: Pet): Mono<Pet> {
-        return petRepository.save(pet)
+        return petRepository.save(pet.ownerId, pet)
     }
 
-    override fun find(id: UUID): Mono<Pet> {
-        return petRepository.findById(id)
-    }
+//    override fun find(id: UUID): Mono<Pet> {
+//        return petRepository.findById(id)
+//    }
 }

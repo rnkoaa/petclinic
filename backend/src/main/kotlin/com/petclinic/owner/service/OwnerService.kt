@@ -57,7 +57,7 @@ class OwnerServiceImpl(val ownerRepository: OwnerRepository) : OwnerService {
 
     override fun findByTelephone(telephone: String): Mono<Owner> {
         return ownerRepository.findByTelephone(telephone)
-                .map { o -> Owner(o) }
+//                .map { o -> Owner(o) }
     }
 
     override fun findById(id: String): Mono<Owner> {

@@ -20,13 +20,13 @@ fun main(args: Array<String>) {
 class FireStoreConfig {
 
     @Bean
-    fun firestore(@Value("#{gcloud.project.id}") projectId: String): Firestore {
+    fun firestore(@Value("\${gcloud.project.id}") projectId: String): Firestore {
         // [START fs_initialize_project_id]
         val firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
                 .setProjectId(projectId)
                 .setCredentials(GoogleCredentials.getApplicationDefault())
                 .build();
-        return firestoreOptions.getService();
+        return firestoreOptions.service
     }
 
 }

@@ -35,7 +35,7 @@ class VisitController(val visitService: VisitService,
 //                .map { o -> createVisitResponse(o) }
     }
 
-    @PostMapping(value = ["visits"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
+   /* @PostMapping(value = ["visits"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
             .APPLICATION_JSON_VALUE])
     fun createVisit(@Valid @RequestBody requestBody: VisitRequest): Mono<CreateVisitResponse> {
         val ownerMaybe = ownerService.find(requestBody.owner)
@@ -58,7 +58,7 @@ class VisitController(val visitService: VisitService,
                 .flatMap { visitService.save(it) }
                 .map { CreateVisitResponse(it.id!!, it.date, it.petId, it.ownerId, it.vetId, it.description) }
 
-    }
+    }*/
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
