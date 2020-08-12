@@ -6,8 +6,6 @@ import com.google.cloud.firestore.*
 import com.petclinic.common.ApiFutureCallbackImpl
 import com.petclinic.common.ApiFutureDocumentSnapshotCallbackImpl
 import com.petclinic.common.ApiFutureQuerySnapshotCallbackImpl
-import com.petclinic.common.repository.BaseRepository
-import com.petclinic.owner.model.Owner
 import com.petclinic.owner.model.Pet
 import com.petclinic.owner.model.PetType
 import org.springframework.stereotype.Component

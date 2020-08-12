@@ -37,15 +37,11 @@ class SpecialtyServiceImpl(val specialtyRepository: SpecialtyRepository) : Speci
 
     override fun findByName(name: String): Mono<Specialty> {
        return specialtyRepository.findByName(name)
-//               .map { Specialty(it) }
     }
 
     fun saveSpecialty(specialty: Specialty): Mono<Specialty> {
         // assign id if there is no id for this user.
         val toSave = if (!specialty.isNew()) specialty else specialty.copy(id = UUID.randomUUID())
-
-//        return specialtyByNameRepository.save(SpecialtyByName(toSave))
-//                .then()
         return specialtyRepository.save(toSave)
     }
 
