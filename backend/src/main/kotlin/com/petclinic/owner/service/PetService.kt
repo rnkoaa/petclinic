@@ -12,7 +12,7 @@ interface PetService {
 //    fun findAll(own): Flux<Pet>
     fun findByOwnerId(ownerId: UUID): Flux<Pet>
     fun save(pet: Pet): Mono<Pet>
-//    fun find(id: UUID): Mono<Pet>
+    fun find(ownerId: UUID, id: UUID): Mono<Pet>
 }
 
 @Service
@@ -33,7 +33,7 @@ class PetServiceImpl(val petRepository: PetRepository) : PetService {
         return petRepository.save(pet.ownerId, pet)
     }
 
-//    override fun find(id: UUID): Mono<Pet> {
-//        return petRepository.findById(id)
-//    }
+    override fun find(ownerId: UUID, id: UUID): Mono<Pet> {
+        return petRepository.findById(ownerId, id)
+    }
 }

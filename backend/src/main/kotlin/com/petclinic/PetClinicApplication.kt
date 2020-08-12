@@ -8,6 +8,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.io.IOException
+
+
+
 
 @SpringBootApplication
 class PetClinicApplication
@@ -28,5 +32,19 @@ class FireStoreConfig {
                 .build();
         return firestoreOptions.service
     }
+
+//    @Bean
+//    @Throws(IOException::class)
+//    fun firestore(): Firestore? {
+//        // Use a service account
+//        val serviceAccount: InputStream = javaClass.getResourceAsStream("token.json")
+//        //		InputStream serviceAccount = new FileInputStream("path/to/serviceAccount.json");
+//        val credentials = GoogleCredentials.fromStream(serviceAccount)
+//        val options: FirebaseOptions = Builder()
+//                .setCredentials(credentials)
+//                .build()
+//        FirebaseApp.initializeApp(options)
+//        return FirestoreClient.getFirestore()
+//    }
 
 }

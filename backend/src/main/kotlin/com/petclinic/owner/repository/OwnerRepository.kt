@@ -37,9 +37,7 @@ class OwnerRepositoryImpl(val firestore: Firestore) : OwnerRepository {
     }
 
     override fun save(owner: Owner): Mono<Owner> {
-
         val ownerWithId = if (!owner.isNew()) owner else owner.copy(id = UUID.randomUUID())
-
         val document = firestore.collection("owner").document(ownerWithId.id!!.toString())
         val data = mutableMapOf<String, Any?>()
         data["owner_id"] = ownerWithId.id
