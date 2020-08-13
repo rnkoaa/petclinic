@@ -9,9 +9,8 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.io.IOException
-
-
-
+import java.io.InputStream
+import java.util.*
 
 @SpringBootApplication
 class PetClinicApplication
@@ -25,26 +24,10 @@ class FireStoreConfig {
 
     @Bean
     fun firestore(@Value("\${gcloud.project.id}") projectId: String): Firestore {
-        // [START fs_initialize_project_id]
         val firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
                 .setProjectId(projectId)
                 .setCredentials(GoogleCredentials.getApplicationDefault())
                 .build();
         return firestoreOptions.service
     }
-
-//    @Bean
-//    @Throws(IOException::class)
-//    fun firestore(): Firestore? {
-//        // Use a service account
-//        val serviceAccount: InputStream = javaClass.getResourceAsStream("token.json")
-//        //		InputStream serviceAccount = new FileInputStream("path/to/serviceAccount.json");
-//        val credentials = GoogleCredentials.fromStream(serviceAccount)
-//        val options: FirebaseOptions = Builder()
-//                .setCredentials(credentials)
-//                .build()
-//        FirebaseApp.initializeApp(options)
-//        return FirestoreClient.getFirestore()
-//    }
-
 }

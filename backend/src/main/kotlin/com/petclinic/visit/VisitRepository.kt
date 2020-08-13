@@ -24,7 +24,9 @@ interface VisitRepository : BaseRepository<Visit, UUID> {
 
 @Component
 class VisitRepositoryImpl(val firestore: Firestore) : VisitRepository {
+
     val executor = Executors.newScheduledThreadPool(2)
+
     fun mapDocumentToVisit(doc: DocumentSnapshot): Visit {
         val visitDateStr = doc["visit_date"] as String
         val visitDate = Instant.parse(visitDateStr)
@@ -32,7 +34,13 @@ class VisitRepositoryImpl(val firestore: Firestore) : VisitRepository {
         val petId = UUID.fromString(doc["pet_id"] as String)
 
         val ownerId = UUID.fromString(doc["owner_id"] as String)
-        val vetId = UUID.fromString(doc["vet_id"] as String)
+
+        // vet id is an optional field
+        val vetId = doc["vet_id"]?.let {
+            val vetIdStr = it as String
+            UUID.fromString(vetIdStr)
+        }
+
         val description = doc["description"] as String
 
         return Visit(UUID.fromString(doc.id), visitDate, petId, ownerId, vetId, description)
@@ -62,7 +70,9 @@ class VisitRepositoryImpl(val firestore: Firestore) : VisitRepository {
         data["visit_date"] = entity.date.toString()
         data["pet_id"] = entity.petId.toString()
         data["owner_id"] = entity.ownerId.toString()
-        data["vet_id"] = entity.vetId.toString()
+        if (entity.vetId != null) {
+            data["vet_id"] = entity.vetId.toString()
+        }
         data["description"] = entity.description
         val resultFuture: ApiFuture<WriteResult> = document.set(data)
 

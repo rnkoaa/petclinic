@@ -17,6 +17,9 @@ RUN chmod +x /application/bin/entrypoint.sh
 # expose data for sqlite data
 VOLUME /application/data
 VOLUME /application/config
+VOLUME /application/secret
+
+ENV GOOGLE_APPLICATION_CREDENTIALS=/application/secret/token.json
 
 COPY --from=builder /application/dependencies/ ./
 COPY --from=builder /application/spring-boot-loader ./
