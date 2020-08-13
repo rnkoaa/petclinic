@@ -1,10 +1,8 @@
 package com.petclinic.vet.service
 
-import com.petclinic.vet.repository.SpecialtyByNameRepository
-import com.petclinic.vet.repository.SpecialtyRepository
+import com.petclinic.common.adapter.DuplicateKeyException
 import com.petclinic.vet.model.Specialty
-import com.petclinic.vet.model.SpecialtyByName
-import org.springframework.dao.DuplicateKeyException
+import com.petclinic.vet.repository.SpecialtyRepository
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -18,8 +16,7 @@ interface SpecialtyService {
 }
 
 @Service
-class SpecialtyServiceImpl(val specialtyRepository: SpecialtyRepository,
-                           val specialtyByNameRepository: SpecialtyByNameRepository) : SpecialtyService {
+class SpecialtyServiceImpl(val specialtyRepository: SpecialtyRepository) : SpecialtyService {
     override fun findAll(): Flux<Specialty> {
         return specialtyRepository.findAll()
     }
@@ -39,20 +36,17 @@ class SpecialtyServiceImpl(val specialtyRepository: SpecialtyRepository,
     }
 
     override fun findByName(name: String): Mono<Specialty> {
-       return specialtyByNameRepository.findByName(name)
-               .map { Specialty(it) }
+       return specialtyRepository.findByName(name)
     }
 
     fun saveSpecialty(specialty: Specialty): Mono<Specialty> {
         // assign id if there is no id for this user.
         val toSave = if (!specialty.isNew()) specialty else specialty.copy(id = UUID.randomUUID())
-
-        return specialtyByNameRepository.save(SpecialtyByName(toSave))
-                .then(specialtyRepository.save(toSave))
+        return specialtyRepository.save(toSave)
     }
 
     fun exists(name: String): Mono<Boolean> {
-       return specialtyByNameRepository.findByName(name)
+       return specialtyRepository.findByName(name)
                .map {
                    true
                }
