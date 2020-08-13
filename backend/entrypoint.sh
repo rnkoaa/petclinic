@@ -2,11 +2,31 @@
 
 set -ex
 
-PATH=$PATH:`pwd`
+PATH=$PATH:$(pwd)
 
 #JAVA_OPTS=""
 AUTO_JAVA_OPTS=""
 DEFAULT_JAVA_HEAP_PERCENT=80
+
+# this ensures that credentials are available before continuing.
+validateCredentials() {
+  if [ -z "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
+    echo "GOOGLE_APPLICATION_CREDENTIALS is not specified"
+    exit 1
+  fi
+
+  echo "Credential File: $GOOGLE_APPLICATION_CREDENTIALS"
+
+  # check if the credentials file exists
+  if [[ ! -f "$GOOGLE_APPLICATION_CREDENTIALS" ]]; then
+    echo "$GOOGLE_APPLICATION_CREDENTIALS file does not exist, cannot continue."
+    exit 1
+  fi
+  echo "$GOOGLE_APPLICATION_CREDENTIALS has been found."
+}
+
+# call the validateCredentials before proceeding
+validateCredentials
 
 # not disable_auto_heap
 if [ -z "$DISABLE_JAVA_AUTO_HEAP" ]; then
@@ -17,7 +37,7 @@ if [ -z "$DISABLE_JAVA_AUTO_HEAP" ]; then
   if [ ! -z "$CONTAINER_MEM_MB" ]; then
 
     if [ -z "$JAVA_HEAP_PERCENT" ]; then
-        JAVA_HEAP_PERCENT=$DEFAULT_JAVA_HEAP_PERCENT
+      JAVA_HEAP_PERCENT=$DEFAULT_JAVA_HEAP_PERCENT
     fi
 
     MEM_JAVA_MB=$(($CONTAINER_MEM_MB * $JAVA_HEAP_PERCENT / 100))
@@ -38,7 +58,7 @@ else
 fi
 
 # ensure port is defined
-if [-z "$PORT"]; then
+if [ -z "$PORT" ]; then
   PORT=8080
 fi
 
@@ -49,7 +69,7 @@ echo "[Start Script] Starting app"
 #ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
 #java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /application/bin/app.jar --spring.config.location=classpath:/default.properties,classpath:/application.yml,file:/application/config/application.yml
 java $JAVA_OPTS org.springframework.boot.loader.JarLauncher \
---spring.config.location=classpath:/default.properties,classpath:/application.yml,file:/application/config/application.yml \
--Dserver.port=$PORT
+  --spring.config.location=classpath:/default.properties,classpath:/application.yml,file:/application/config/application.yml \
+  -Dserver.port=$PORT
 
 exec "$@"

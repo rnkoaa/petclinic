@@ -30,8 +30,9 @@ class VisitController(val visitService: VisitService,
                       val ownerService: OwnerService
 ) {
     @GetMapping(value = ["visits"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun findVisits(): Flux<Visit> {
+    fun findVisits(): Flux<CreateVisitResponse> {
         return visitService.findAll()
+                .map { CreateVisitResponse(it.id!!, it.date, it.petId, it.ownerId, it.vetId, it.description) }
     }
 
     @PostMapping(value = ["visits"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
