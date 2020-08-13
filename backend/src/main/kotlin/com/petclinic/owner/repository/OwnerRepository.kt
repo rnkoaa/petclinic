@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.util.*
+import java.util.concurrent.Executors
 
 
 interface OwnerRepository : BaseRepository<Owner, UUID> {
@@ -23,21 +24,23 @@ interface OwnerRepository : BaseRepository<Owner, UUID> {
 
 @Component("ownerRepository")
 class OwnerRepositoryImpl(val firestore: Firestore) : OwnerRepository {
-
+    val executor = Executors.newScheduledThreadPool(2)
     override fun findByTelephone(telephone: String): Mono<Owner> {
         val ownerCollection = firestore.collection("owner")
         val querySnapshot = ownerCollection.whereEqualTo("telephone", telephone).get()
-        return Mono.create<QuerySnapshot> { monoSink -> ApiFutures.addCallback(querySnapshot, ApiFutureQuerySnapshotCallbackImpl(monoSink)) }
-                .filter { it.documents.size > 0 }
+        return Mono.create<QuerySnapshot> { monoSink ->
+            ApiFutures.addCallback(querySnapshot, ApiFutureQuerySnapshotCallbackImpl(monoSink), executor)
+        }.filter { it.documents.size > 0 }
                 .map { it.documents[0] }
                 .map { doc ->
                     Owner(UUID.fromString(doc.id), doc["last_name"] as String, doc["first_name"] as String, doc["telephone"] as String,
                             doc["address"] as String, doc["city"] as String)
                 }
+
     }
 
-    override fun save(owner: Owner): Mono<Owner> {
-        val ownerWithId = if (!owner.isNew()) owner else owner.copy(id = UUID.randomUUID())
+    override fun save(entity: Owner): Mono<Owner> {
+        val ownerWithId = if (!entity.isNew()) entity else entity.copy(id = UUID.randomUUID())
         val document = firestore.collection("owner").document(ownerWithId.id!!.toString())
         val data = mutableMapOf<String, Any?>()
         data["owner_id"] = ownerWithId.id
@@ -48,29 +51,32 @@ class OwnerRepositoryImpl(val firestore: Firestore) : OwnerRepository {
         data["city"] = ownerWithId.city
         val resultFuture: ApiFuture<WriteResult> = document.set(data)
 
-        return Mono.create<WriteResult> { sink -> ApiFutures.addCallback(resultFuture, ApiFutureCallbackImpl(sink)) }
-                .map { ownerWithId }
+        return Mono.create<WriteResult> { sink ->
+            ApiFutures.addCallback(resultFuture, ApiFutureCallbackImpl(sink), executor)
+        }.map { ownerWithId }
     }
 
-    override fun save(owners: List<Owner>): Flux<Owner> {
-        val savedOwners = owners.map { save(it) }
+    override fun save(entities: List<Owner>): Flux<Owner> {
+        val savedOwners = entities.map { save(it) }
         return Flux.mergeSequential(savedOwners)
     }
 
     override fun findById(id: UUID): Mono<Owner> {
         val documentFuture = firestore.collection("owner").document(id.toString()).get()
-        return Mono.create<DocumentSnapshot> { monoSink -> ApiFutures.addCallback(documentFuture, ApiFutureDocumentSnapshotCallbackImpl(monoSink)) }
-                .map { doc ->
-                    Owner(UUID.fromString(doc.id), doc["last_name"] as String, doc["first_name"] as String, doc["telephone"] as String,
-                            doc["address"] as String, doc["city"] as String)
-                }
+        return Mono.create<DocumentSnapshot> { monoSink ->
+            ApiFutures.addCallback(documentFuture, ApiFutureDocumentSnapshotCallbackImpl(monoSink), executor)
+        }.map { doc ->
+            Owner(UUID.fromString(doc.id), doc["last_name"] as String, doc["first_name"] as String, doc["telephone"] as String,
+                    doc["address"] as String, doc["city"] as String)
+        }
     }
 
     override fun findAll(): Flux<Owner> {
         val querySnapshot = firestore.collection("owner").get()
 
-        return Mono.create<QuerySnapshot> { monoSink -> ApiFutures.addCallback(querySnapshot, ApiFutureQuerySnapshotCallbackImpl(monoSink)) }
-                .filter { it.documents.size > 0 }
+        return Mono.create<QuerySnapshot> { monoSink ->
+            ApiFutures.addCallback(querySnapshot, ApiFutureQuerySnapshotCallbackImpl(monoSink), executor)
+        }.filter { it.documents.size > 0 }
                 .map { it.documents }
                 .flatMapIterable { it }
                 .map { doc ->

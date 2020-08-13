@@ -10,15 +10,12 @@ import com.petclinic.common.ApiFutureCallbackImpl
 import com.petclinic.common.ApiFutureDocumentSnapshotCallbackImpl
 import com.petclinic.common.ApiFutureQuerySnapshotCallbackImpl
 import com.petclinic.common.repository.BaseRepository
-import com.petclinic.owner.model.Owner
-import com.petclinic.owner.model.Pet
-import com.petclinic.owner.model.PetType
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.time.Instant
-import java.time.LocalDate
 import java.util.*
+import java.util.concurrent.Executors
 
 
 interface VisitRepository : BaseRepository<Visit, UUID> {
@@ -27,6 +24,7 @@ interface VisitRepository : BaseRepository<Visit, UUID> {
 
 @Component
 class VisitRepositoryImpl(val firestore: Firestore) : VisitRepository {
+    val executor = Executors.newScheduledThreadPool(2)
     fun mapDocumentToVisit(doc: DocumentSnapshot): Visit {
         val visitDateStr = doc["visit_date"] as String
         val visitDate = Instant.parse(visitDateStr)
@@ -41,7 +39,9 @@ class VisitRepositoryImpl(val firestore: Firestore) : VisitRepository {
     }
 
     fun convertQuerySnapshot(querySnapshot: ApiFuture<QuerySnapshot>): Flux<Visit> {
-        return Mono.create<QuerySnapshot> { monoSink -> ApiFutures.addCallback(querySnapshot, ApiFutureQuerySnapshotCallbackImpl(monoSink)) }
+        return Mono.create<QuerySnapshot> { monoSink ->
+            ApiFutures.addCallback(querySnapshot, ApiFutureQuerySnapshotCallbackImpl(monoSink), executor)
+        }
                 .filter { it.documents.size > 0 }
                 .map { it.documents }
                 .flatMapIterable { it }
@@ -54,31 +54,33 @@ class VisitRepositoryImpl(val firestore: Firestore) : VisitRepository {
         return convertQuerySnapshot(querySnapshot)
     }
 
-    override fun save(visit: Visit): Mono<Visit> {
+    override fun save(entity: Visit): Mono<Visit> {
         val visitCollection = firestore.collection("visit")
-        val visitWithId = if (!visit.isNew()) visit else visit.copy(id = UUID.randomUUID())
+        val visitWithId = if (!entity.isNew()) entity else entity.copy(id = UUID.randomUUID())
         val document = visitCollection.document(visitWithId.id!!.toString())
         val data = mutableMapOf<String, Any?>()
-        data["visit_date"] = visit.date.toString()
-        data["pet_id"] = visit.petId.toString()
-        data["owner_id"] = visit.ownerId.toString()
-        data["vet_id"] = visit.vetId.toString()
-        data["description"] = visit.description
+        data["visit_date"] = entity.date.toString()
+        data["pet_id"] = entity.petId.toString()
+        data["owner_id"] = entity.ownerId.toString()
+        data["vet_id"] = entity.vetId.toString()
+        data["description"] = entity.description
         val resultFuture: ApiFuture<WriteResult> = document.set(data)
 
-        return Mono.create<WriteResult> { sink -> ApiFutures.addCallback(resultFuture, ApiFutureCallbackImpl(sink)) }
-                .map { visitWithId }
+        return Mono.create<WriteResult> { sink ->
+            ApiFutures.addCallback(resultFuture, ApiFutureCallbackImpl(sink), executor)
+        }.map { visitWithId }
     }
 
-    override fun save(visits: List<Visit>): Flux<Visit> {
-        val savedVisits = visits.map { save(it) }
+    override fun save(entities: List<Visit>): Flux<Visit> {
+        val savedVisits = entities.map { save(it) }
         return Flux.mergeSequential(savedVisits)
     }
 
     override fun findById(id: UUID): Mono<Visit> {
         val documentFuture = firestore.collection("visit").document(id.toString()).get()
-        return Mono.create<DocumentSnapshot> { monoSink -> ApiFutures.addCallback(documentFuture, ApiFutureDocumentSnapshotCallbackImpl(monoSink)) }
-                .map { doc -> mapDocumentToVisit(doc) }
+        return Mono.create<DocumentSnapshot> { monoSink ->
+            ApiFutures.addCallback(documentFuture, ApiFutureDocumentSnapshotCallbackImpl(monoSink), executor)
+        }.map { doc -> mapDocumentToVisit(doc) }
     }
 
     override fun findAll(): Flux<Visit> {

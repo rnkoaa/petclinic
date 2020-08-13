@@ -10,16 +10,12 @@ import com.petclinic.common.ApiFutureCallbackImpl
 import com.petclinic.common.ApiFutureDocumentSnapshotCallbackImpl
 import com.petclinic.common.ApiFutureQuerySnapshotCallbackImpl
 import com.petclinic.common.repository.BaseRepository
-import com.petclinic.owner.model.Owner
-import com.petclinic.owner.model.Pet
-import com.petclinic.owner.model.PetType
 import com.petclinic.vet.model.Specialty
-import com.petclinic.vet.model.VetSpecialty
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import java.time.LocalDate
 import java.util.*
+import java.util.concurrent.Executors
 
 interface SpecialtyRepository : BaseRepository<Specialty, UUID> {
     fun findByName(name: String): Mono<Specialty>
@@ -27,7 +23,7 @@ interface SpecialtyRepository : BaseRepository<Specialty, UUID> {
 
 @Component("specialtyRepository")
 class SpecialtyRepositoryImpl(val firestore: Firestore) : SpecialtyRepository {
-
+    var executor = Executors.newScheduledThreadPool(2)
     fun mapDocumentToSpecialty(doc: DocumentSnapshot): Specialty {
         val specialtyId = UUID.fromString(doc.id)
         val name = doc["name"] as String
@@ -37,43 +33,51 @@ class SpecialtyRepositoryImpl(val firestore: Firestore) : SpecialtyRepository {
     override fun findByName(name: String): Mono<Specialty> {
         val ownerCollection = firestore.collection("specialty")
         val querySnapshot = ownerCollection.whereEqualTo("name", name).get()
-        return Mono.create<QuerySnapshot> { monoSink -> ApiFutures.addCallback(querySnapshot, ApiFutureQuerySnapshotCallbackImpl(monoSink)) }
+        return Mono.create<QuerySnapshot> { monoSink ->
+            ApiFutures.addCallback(querySnapshot,
+                    ApiFutureQuerySnapshotCallbackImpl(monoSink), executor)
+        }
                 .filter { it.documents.size > 0 }
                 .map { it.documents[0] }
                 .map { doc -> mapDocumentToSpecialty(doc) }
     }
 
-    override fun save(specialty: Specialty): Mono<Specialty> {
-        val specialtyWithId = if (!specialty.isNew()) specialty else specialty.copy(id = UUID.randomUUID())
+    override fun save(entity: Specialty): Mono<Specialty> {
+        val specialtyWithId = if (!entity.isNew()) entity else entity.copy(id = UUID.randomUUID())
         val document = firestore.collection("specialty").document(specialtyWithId.id!!.toString())
         val data = mutableMapOf<String, Any?>()
         data["specialty_id"] = specialtyWithId.id.toString()
         data["name"] = specialtyWithId.name
         val resultFuture: ApiFuture<WriteResult> = document.set(data)
 
-        return Mono.create<WriteResult> { sink -> ApiFutures.addCallback(resultFuture, ApiFutureCallbackImpl(sink)) }
+        return Mono.create<WriteResult> { sink ->
+            ApiFutures.addCallback(resultFuture, ApiFutureCallbackImpl(sink), executor)
+        }
                 .map { specialtyWithId }
     }
 
-    override fun save(specialties: List<Specialty>): Flux<Specialty> {
-        val savedSpecialties = specialties.map { save(it) }
+    override fun save(entities: List<Specialty>): Flux<Specialty> {
+        val savedSpecialties = entities.map { save(it) }
         return Flux.mergeSequential(savedSpecialties)
     }
 
     override fun findById(id: UUID): Mono<Specialty> {
         val documentFuture = firestore.collection("specialty").document(id.toString()).get()
-        return Mono.create<DocumentSnapshot> { monoSink -> ApiFutures.addCallback(documentFuture, ApiFutureDocumentSnapshotCallbackImpl(monoSink)) }
-                .map { doc -> mapDocumentToSpecialty(doc) }
+        return Mono.create<DocumentSnapshot> { monoSink ->
+            ApiFutures.addCallback(documentFuture, ApiFutureDocumentSnapshotCallbackImpl(monoSink), executor)
+        }.map { doc -> mapDocumentToSpecialty(doc) }
     }
 
     override fun findAll(): Flux<Specialty> {
         val querySnapshot = firestore.collection("specialty").get()
 
-        return Mono.create<QuerySnapshot> { monoSink -> ApiFutures.addCallback(querySnapshot, ApiFutureQuerySnapshotCallbackImpl(monoSink)) }
-                .filter { it.documents.size > 0 }
+        return Mono.create<QuerySnapshot> { monoSink ->
+            ApiFutures.addCallback(querySnapshot, ApiFutureQuerySnapshotCallbackImpl(monoSink), executor)
+        }.filter { it.documents.size > 0 }
                 .map { it.documents }
                 .flatMapIterable { it }
                 .map { doc -> mapDocumentToSpecialty(doc) }
+
     }
 
 }

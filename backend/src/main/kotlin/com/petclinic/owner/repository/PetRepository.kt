@@ -13,6 +13,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.time.LocalDate
 import java.util.*
+import java.util.concurrent.Executors
 
 interface SubDocumentRepository<T, U, R> {
     fun save(parentId: U, document: T): Mono<T>
@@ -27,6 +28,7 @@ interface PetRepository : SubDocumentRepository<Pet, UUID, UUID> {
 
 @Component("petRepository")
 class PetRepositoryImpl(val firestore: Firestore) : PetRepository {
+    val executor = Executors.newScheduledThreadPool(2)
     fun mapDocumentToPet(doc: DocumentSnapshot, ownerId: UUID): Pet {
         val petId = UUID.fromString(doc.id)
         val petDob = doc["birth_date"] as String
@@ -52,7 +54,10 @@ class PetRepositoryImpl(val firestore: Firestore) : PetRepository {
     override fun findByOwnerId(ownerId: UUID): Flux<Pet> {
         val querySnapshot = firestore.collection("owner").document(ownerId.toString()).collection("pets").get()
 
-        return Mono.create<QuerySnapshot> { monoSink -> ApiFutures.addCallback(querySnapshot, ApiFutureQuerySnapshotCallbackImpl(monoSink)) }
+        return Mono.create<QuerySnapshot> { monoSink ->
+            ApiFutures.addCallback(querySnapshot,
+                    ApiFutureQuerySnapshotCallbackImpl(monoSink), executor)
+        }
                 .filter { it.documents.size > 0 }
                 .map { it.documents }
                 .flatMapIterable { it }
@@ -62,29 +67,24 @@ class PetRepositoryImpl(val firestore: Firestore) : PetRepository {
     override fun save(parentId: UUID, document: Pet): Mono<Pet> {
         val collectionReference = firestore.collection("owner").document(parentId.toString()).collection("pets")
         val resultFuture = mapPetToDocument(collectionReference, document)
-        return Mono.create<WriteResult> { sink -> ApiFutures.addCallback(resultFuture, ApiFutureCallbackImpl(sink)) }
+        return Mono.create<WriteResult> { sink -> ApiFutures.addCallback(resultFuture, ApiFutureCallbackImpl(sink), executor) }
                 .map { document }
     }
-
 
     override fun findById(parentId: UUID, id: UUID): Mono<Pet> {
         val documentSnapshot = firestore.collection("owner").document(parentId.toString()).collection("pets")
                 .document(id.toString()).get()
-        return Mono.create<DocumentSnapshot> { monoSink -> ApiFutures.addCallback(documentSnapshot, ApiFutureDocumentSnapshotCallbackImpl(monoSink)) }
+        return Mono.create<DocumentSnapshot> { monoSink ->
+            ApiFutures.addCallback(documentSnapshot,
+                    ApiFutureDocumentSnapshotCallbackImpl(monoSink), executor)
+        }
                 .map { doc -> mapDocumentToPet(doc, parentId) }
     }
-
 
     override fun saveAll(parentId: UUID, documents: List<Pet>): Flux<Pet> {
         val savedOwners = documents.map { save(parentId, it) }
         return Flux.mergeSequential(savedOwners)
     }
-
 }
 
-
-////@FunctionalInterface
-//class DocumentToPetMapper : Function<QueryDocumentSnapshot, Pet> {
-//
-//}
 

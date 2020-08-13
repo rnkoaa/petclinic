@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.petclinic.common.adapter.NotFoundException
+import com.petclinic.vet.model.Specialty
 import com.petclinic.vet.model.Vet
-import com.petclinic.vet.model.VetSpecialty
 import com.petclinic.vet.service.SpecialtyService
 import com.petclinic.vet.service.VetService
 import io.swagger.v3.oas.annotations.Operation
@@ -59,7 +59,7 @@ class VetController(val vetService: VetService, val specialtyService: SpecialtyS
                 .map {
                     val vet = it.t1
                     val vSpecialty = it.t2
-                    vet.copy(specialties = vet.specialties + VetSpecialty(vSpecialty.id, vSpecialty.name))
+                    vet.copy(specialties = vet.specialties + Specialty(vSpecialty.id, vSpecialty.name))
                 }
                 .flatMap { vetService.update(it) }
                 .map { createVetResponse(it) }
@@ -87,9 +87,6 @@ class VetController(val vetService: VetService, val specialtyService: SpecialtyS
         val vetSpecialties = Flux.fromIterable(request.specialties)
                 .flatMap {
                     specialtyService.findByName(it)
-                }
-                .map { s ->
-                    VetSpecialty(s.id, s.name)
                 }
                 .collectList()
                 .map { it.toSet() }

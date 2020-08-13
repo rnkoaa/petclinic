@@ -17,7 +17,7 @@ data class Vet(override var id: UUID?,
                override var firstName: String,
                var telephone: String = "",
                var email: String = "",
-               var specialties: Set<VetSpecialty>
+               var specialties: Set<Specialty>
 ) : Person(id, firstName, lastName)
 
 data class VetByTelephoneKey(var telephone: String,
