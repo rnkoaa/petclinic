@@ -18,7 +18,6 @@ import reactor.core.publisher.Mono
 import java.util.*
 import javax.validation.Valid
 
-
 @RestController
 @RequestMapping("/petclinic/v1")
 class VetController(val vetService: VetService, val specialtyService: SpecialtyService) {

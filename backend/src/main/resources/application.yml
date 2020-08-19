@@ -12,6 +12,13 @@
 #      port: 9042
 #      contactPoints: localhost
 #      localDatacenter: datacenter1
-gcloud:
-  project:
-    id: ${GCLOUD_PROJECT_ID:spring-petclinic-285614}
+#gcloud:
+#  project:
+#    id: ${GCLOUD_PROJECT_ID}
+management:
+  endpoint:
+    health:
+      show-details: always
+  health:
+    diskspace:
+      enabled: false
