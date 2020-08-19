@@ -10,18 +10,22 @@ DEFAULT_JAVA_HEAP_PERCENT=80
 
 # this ensures that credentials are available before continuing.
 validateCredentials() {
-  if [ -z "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
+  if [ -z "$CLOUD_ENVIRONMENT" ]; then
+    echo "CLOUD_ENVIRONMENT is not set, this is required to continue"
+    exit 1
+  fi
+
+  if [[ "$CLOUD_ENVIRONMENT" == "dev" && -z "$GOOGLE_APPLICATION_CREDENTIALS" ]]; then
     echo "GOOGLE_APPLICATION_CREDENTIALS is not specified"
     exit 1
   fi
 
-  echo "Credential File: $GOOGLE_APPLICATION_CREDENTIALS"
-
   # check if the credentials file exists
-  if [[ ! -f "$GOOGLE_APPLICATION_CREDENTIALS" ]]; then
-    echo "$GOOGLE_APPLICATION_CREDENTIALS file does not exist, cannot continue."
+  if [[ "$CLOUD_ENVIRONMENT" == "dev" && ! -f "$GOOGLE_APPLICATION_CREDENTIALS" ]]; then
+    echo "$GOOGLE_APPLICATION_CREDENTIALS file does not exist for cloud environment $CLOUD_ENVIRONMENT, cannot continue."
     exit 1
   fi
+
   echo "$GOOGLE_APPLICATION_CREDENTIALS has been found."
 }
 

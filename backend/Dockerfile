@@ -9,6 +9,7 @@ RUN java -Djarmode=layertools -jar application.jar extract
 FROM adoptopenjdk:11-jre-hotspot
 WORKDIR /application
 
+ENV CLOUD_ENVIRONMENT=dev
 ENV PORT=8080
 
 COPY entrypoint.sh /application/bin/
@@ -19,7 +20,7 @@ VOLUME /application/data
 VOLUME /application/config
 VOLUME /application/secret
 
-ENV GOOGLE_APPLICATION_CREDENTIALS=/application/secret/token.json
+#ENV GOOGLE_APPLICATION_CREDENTIALS=/application/secret/token.json
 
 COPY --from=builder /application/dependencies/ ./
 COPY --from=builder /application/spring-boot-loader ./
