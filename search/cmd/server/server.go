@@ -1,13 +1,8 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"log"
 	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
 	bleveHttp "github.com/blevesearch/bleve/http"
@@ -31,8 +26,8 @@ type Server struct {
 	Router *mux.Router
 }
 
-// New - creates a new server object
-func New() *Server {
+// NewHttpServer - creates a new server object
+func NewHttpServer() *Server {
 	return &Server{
 		App: app.New(),
 		Params: &ServerParams{
@@ -43,8 +38,8 @@ func New() *Server {
 	}
 }
 
-// Initializer - Initialize the app object
-func (s *Server) Initializer(dataDir string) {
+// Initialize - Initialize the app object
+func (s *Server) Initialize(dataDir string) {
 	// s.App =
 	if dataDir != "" {
 		s.Params.DataDir = dataDir
@@ -77,7 +72,7 @@ func (s *Server) Initializer(dataDir string) {
 }
 
 // Run - this runs the app
-func (s *Server) Run(addr string) {
+func (s *Server) Run(addr string) *http.Server {
 
 	// CORS
 	fullAddress := fmt.Sprintf("%s:%s", s.Params.Address, s.Params.Port)
@@ -90,8 +85,7 @@ func (s *Server) Run(addr string) {
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
-
-	serveAndGracefulShutdown(srv)
+	return srv
 }
 
 // endpoint to test the health of the app
@@ -103,29 +97,4 @@ func healthz(w http.ResponseWriter, r *http.Request) {
 // version returns the service version
 func version(w http.ResponseWriter, r *http.Request) {
 	_, _ = fmt.Fprintf(w, ver)
-}
-
-// Starts server with gracefully shutdown semantics
-func serveAndGracefulShutdown(svr *http.Server) {
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
-
-	// wait for requests and serve
-	serveAndWait := make(chan error)
-	go func() {
-		log.Printf("Server listening on port %s", svr.Addr)
-		serveAndWait <- svr.ListenAndServe()
-	}()
-
-	// block until either an error or OS-level signals
-	// to shutdown gracefully
-	select {
-	case err := <-serveAndWait:
-		log.Fatal(err)
-	case <-sigChan:
-		log.Printf("Shutdown signal received... closing server")
-		// gracefully shutdown the server, waiting max 30 seconds for current operations to complete
-		ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
-		_ = svr.Shutdown(ctx)
-	}
 }

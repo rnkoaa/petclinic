@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option go_package = ".;protos";
+option java_multiple_files = true;
+option java_package = "com.petclinic";
+option java_outer_classname = "OwnerServiceProto";
+
+package petclinic;
+message Pet {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+  int64 birth_date = 4;
+}
+
+message OwnerIndexRequest {
+  string Id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string address = 4;
+  string city = 5;
+  string state = 6;
+  string zip_code = 7;
+  string email = 8;
+  string telephone = 9;
+  Pet pets = 10;
+}
+
+message OwnerIndexResponse {
+  int32 status = 1;
+  string errorMessage = 2;
+}
+
+service OwnerIndexService {
+  rpc IndexOwner(OwnerIndexRequest) returns (OwnerIndexResponse){}
+}
