@@ -1,20 +1,11 @@
-#spring:
-#  data:
-#    mongodb:
-#      database: pet-clinic
-#      uri: mongodb://localhost/pet-clinic
-
-#spring:
-#  data:
-#    cassandra:
-#      keyspaceName: petclinic
-#      sessionName: datacenter1
-#      port: 9042
-#      contactPoints: localhost
-#      localDatacenter: datacenter1
-#gcloud:
-#  project:
-#    id: ${GCLOUD_PROJECT_ID}
+spring:
+  data:
+    cassandra:
+      keyspaceName: petclinic
+      sessionName: datacenter1
+      port: 9042
+      contactPoints: localhost
+      localDatacenter: datacenter1
 management:
   endpoint:
     health:
@@ -22,3 +13,14 @@ management:
   health:
     diskspace:
       enabled: false
+---
+astra:
+  cassandra:
+    username: spring_petclinic
+    password: spring_petclinic
+    securePath: ${CASSANDRA_BUNDLE_FILE_NAME:cassandra-bundle.zip}
+    keyspaceName: spring_petclinic
+    sessionName: spring_petclinic1
+spring:
+  profiles:
+    active: astra

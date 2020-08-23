@@ -15,6 +15,7 @@ services:
     image: rnkoaa/petclinic-api:latest
     container_name: petclinic-api
     environment:
+      - "SPRING_PROFILES_ACTIVE=local"
       - "CONTAINER_MEM_MB=256"
       - "SPRING_DATA_CASSANDRA_CONSISTENCYLEVEL=local_one"
       - "SPRING_DATA_CASSANDRA_CONTACTPOINTS=cassandra"

@@ -2,7 +2,7 @@ version: '3'
 
 services:
   cassandra:
-    image: rnkoaa/cassandra:3
+    image: cassandra:3
     container_name: pc_cassandra
     ports:
     - 9042:9042

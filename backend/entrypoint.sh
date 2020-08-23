@@ -61,6 +61,40 @@ else
   JAVA_OPTS="-XX:MaxJavaStackTraceDepth=50 $JAVA_OPTS"
 fi
 
+# if we are connecting to astra, we have to download the astra bundle before connecting
+if [[ ! -z "$SPRING_PROFILES_ACTIVE" && "$SPRING_PROFILES_ACTIVE" == "astra" ]];
+then
+  # download the authentication bundle for connecting to datastax astra
+  # if GOOGLE_APPLICATION_CREDENTIALS is defined
+  if [[ ! -z "$CLOUD_ENVIRONMENT" && "$CLOUD_ENVIRONMENT" == "local" ]]; 
+  then
+    # if GOOGLE_APPLICATION_CREDENTIALS is not defined when running locally, this will not work
+    if [ -z "$GOOGLE_APPLICATION_CREDENTIALS" ]; 
+    then
+      echo "$GOOGLE_APPLICATION_CREDENTIALS is required when not in gcp"
+      exit 1
+    fi
+  fi
+
+  if [ -z "$CASSANDRA_BUNDLE_BUCKET" ]; 
+  then
+    echo "CASSANDRA_BUNDLE_BUCKET env variable is required is required when not in gcp"
+    exit 1
+  fi
+
+
+  if [ -z "$CASSANDRA_BUNDLE_FILE_NAME" ]; 
+  then
+    echo "CASSANDRA_BUNDLE_FILE_NAME env variable is required when not in gcp"
+    exit 1
+  fi
+
+  # download cassandra bundle for astra
+  /application/bin/gcp-storage-download -b "$CASSANDRA_BUNDLE_BUCKET" \
+    -o "$CASSANDRA_BUNDLE_FILE_NAME" \
+    -d "/application/$CASSANDRA_BUNDLE_FILE_NAME"
+fi
+
 # ensure port is defined
 if [ -z "$PORT" ]; then
   PORT=8080

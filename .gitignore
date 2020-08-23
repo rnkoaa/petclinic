@@ -32,3 +32,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+astra-docker-compose.yml
+gcp-cloud-storage/bin
+gcp-cloud-storage/distribution
