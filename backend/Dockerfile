@@ -1,6 +1,6 @@
 FROM adoptopenjdk:11-jre-hotspot as builder
 
-WORKDIR application
+WORKDIR /application
 
 # download and executable which can be used to download files.
 RUN curl -o gcp-storage-download-linux-amd64-0.0.2.tar.gz \
@@ -32,15 +32,12 @@ VOLUME /application/data
 VOLUME /application/config
 VOLUME /application/secret
 
-#ENV GOOGLE_APPLICATION_CREDENTIALS=/application/secret/token.json
-
 COPY --from=builder /application/gcp-storage-download /application/bin
 COPY --from=builder /application/dependencies/ ./
 COPY --from=builder /application/spring-boot-loader ./
 # COPY --from=builder application/internal-dependencies ./
 COPY --from=builder /application/snapshot-dependencies/ ./
 COPY --from=builder /application/application/ ./
-#ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
 ENTRYPOINT ["/application/bin/entrypoint.sh"]
 
 EXPOSE $PORT
