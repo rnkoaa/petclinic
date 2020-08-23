@@ -18,7 +18,7 @@ interface OwnerService {
 }
 
 @Service
-class OwnerServiceImpl(val ownerRepository: OwnerRepository) : OwnerService {
+class OwnerServiceImpl(val ownerRepository: OwnerRepository/*, val ownerIndexClient: OwnerIndexClient*/) : OwnerService {
 
     override fun findAll(): Flux<Owner> {
         return ownerRepository.findAll()
@@ -40,10 +40,20 @@ class OwnerServiceImpl(val ownerRepository: OwnerRepository) : OwnerService {
                 .filterWhen { o ->
                     telephoneExists(o.telephone).map { e -> !e }
                 }
-                .switchIfEmpty(Mono.error(DuplicateKeyException("There is an owner with the same telephone " +owner.telephone)))
+                .switchIfEmpty(Mono.error(DuplicateKeyException("There is an owner with the same telephone " + owner.telephone)))
 
                 // if it does not exist, save this owner.
                 .flatMap { saveOwner(owner) }
+//                .map { o ->
+//                    val ownerRes = ownerIndexClient.indexOwner(o)
+//                    if (ownerRes.status > 0) {
+//                        println("error index owner: ${ownerRes.message}")
+//                    } else {
+//                        println("successfully indexed owner")
+//                    }
+//
+//                    o
+//                }
     }
 
     private fun saveOwner(owner: Owner): Mono<Owner> {
