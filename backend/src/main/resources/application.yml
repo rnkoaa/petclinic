@@ -6,7 +6,13 @@ spring:
       port: 9042
       contactPoints: localhost
       localDatacenter: datacenter1
-
+management:
+  endpoint:
+    health:
+      show-details: always
+  health:
+    diskspace:
+      enabled: false
 ---
 astra:
   cassandra:

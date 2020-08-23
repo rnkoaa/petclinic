@@ -1,11 +1,8 @@
 package com.petclinic.vet.service
 
-import com.petclinic.owner.model.Pet
-import com.petclinic.vet.repository.VetByTelephoneRepository
-import com.petclinic.vet.repository.VetRepository
+import com.petclinic.common.adapter.DuplicateKeyException
 import com.petclinic.vet.model.Vet
-import com.petclinic.vet.model.VetByTelephone
-import org.springframework.dao.DuplicateKeyException
+import com.petclinic.vet.repository.VetRepository
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -21,8 +18,7 @@ interface VetService {
 }
 
 @Service
-class VetServiceImpl(val vetRepository: VetRepository,
-                     val vetByTelephoneRepository: VetByTelephoneRepository) : VetService {
+class VetServiceImpl(val vetRepository: VetRepository) : VetService {
     override fun findAll(): Flux<Vet> {
         return vetRepository.findAll()
     }
@@ -54,12 +50,13 @@ class VetServiceImpl(val vetRepository: VetRepository,
         // assign id if there is no id for this user.
         val toSave = if (!vet.isNew()) vet else vet.copy(id = UUID.randomUUID())
 
-        return vetByTelephoneRepository.save(VetByTelephone(toSave))
-                .then(vetRepository.save(toSave))
+//        return vetByTelephoneRepository.save(VetByTelephone(toSave))
+//                .then()
+        return vetRepository.save(toSave)
     }
 
     override fun exists(name: String): Mono<Boolean> {
-        return vetByTelephoneRepository.findByTelephone(name)
+        return vetRepository.findByTelephone(name)
                 .map {
                     true
                 }

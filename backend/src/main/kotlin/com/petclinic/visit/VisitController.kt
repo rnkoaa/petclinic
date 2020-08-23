@@ -30,9 +30,9 @@ class VisitController(val visitService: VisitService,
                       val ownerService: OwnerService
 ) {
     @GetMapping(value = ["visits"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun findVisits(): Flux<Visit> {
+    fun findVisits(): Flux<CreateVisitResponse> {
         return visitService.findAll()
-//                .map { o -> createVisitResponse(o) }
+                .map { CreateVisitResponse(it.id!!, it.date, it.petId, it.ownerId, it.vetId, it.description) }
     }
 
     @PostMapping(value = ["visits"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
@@ -40,7 +40,7 @@ class VisitController(val visitService: VisitService,
     fun createVisit(@Valid @RequestBody requestBody: VisitRequest): Mono<CreateVisitResponse> {
         val ownerMaybe = ownerService.find(requestBody.owner)
                 .switchIfEmpty(Mono.error(NotFoundException("owner with id ${requestBody.owner} does not exist")))
-        val petMaybe = petService.find(requestBody.pet)
+        val petMaybe = petService.find(requestBody.owner, requestBody.pet)
                 .switchIfEmpty(Mono.error(NotFoundException("owner with id ${requestBody.owner} does not exist")))
 
         // combine all these sources if they are all available to create a visit.

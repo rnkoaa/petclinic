@@ -19,6 +19,7 @@ RUN java -Djarmode=layertools -jar application.jar extract
 FROM adoptopenjdk:11-jre-hotspot
 WORKDIR /application
 
+ENV CLOUD_ENVIRONMENT=dev
 ENV PORT=8080
 ENV CASSANDRA_BUNDLE_BUCKET=bundle-bucket
 ENV CASSANDRA_BUNDLE_FILE_NAME=bundle-name
@@ -29,6 +30,9 @@ RUN chmod +x /application/bin/entrypoint.sh
 # expose data for sqlite data
 VOLUME /application/data
 VOLUME /application/config
+VOLUME /application/secret
+
+#ENV GOOGLE_APPLICATION_CREDENTIALS=/application/secret/token.json
 
 COPY --from=builder /application/gcp-storage-download /application/bin
 COPY --from=builder /application/dependencies/ ./
