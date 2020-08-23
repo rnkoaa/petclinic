@@ -1,9 +1,3 @@
-#spring:
-#  data:
-#    mongodb:
-#      database: pet-clinic
-#      uri: mongodb://localhost/pet-clinic
-
 spring:
   data:
     cassandra:
@@ -12,3 +6,15 @@ spring:
       port: 9042
       contactPoints: localhost
       localDatacenter: datacenter1
+
+---
+astra:
+  cassandra:
+    username: spring_petclinic
+    password: spring_petclinic
+    securePath: ${CASSANDRA_BUNDLE_FILE_NAME:cassandra-bundle.zip}
+    keyspaceName: spring_petclinic
+    sessionName: spring_petclinic1
+spring:
+  profiles:
+    active: astra
