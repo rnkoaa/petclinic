@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Profile
 import org.springframework.data.cassandra.repository.config.EnableReactiveCassandraRepositories
 import java.net.InetSocketAddress
 
+//https://docs.spring.io/spring-data/cassandra/docs/current/reference/html/#reference
 
 @EnableConfigurationProperties(value = [CassandraProperties::class])
 @Configuration

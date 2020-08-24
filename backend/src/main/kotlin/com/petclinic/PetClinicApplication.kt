@@ -1,11 +1,8 @@
 package com.petclinic
 
-import com.google.auth.oauth2.GoogleCredentials
-import com.google.cloud.firestore.Firestore
-import com.google.cloud.firestore.FirestoreOptions
 //import com.petclinic.owner.service.OwnerIndexClient
-import io.grpc.ManagedChannel
-import io.grpc.ManagedChannelBuilder
+//import io.grpc.ManagedChannel
+//import io.grpc.ManagedChannelBuilder
 import kotlinx.coroutines.asCoroutineDispatcher
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.SpringBootApplication

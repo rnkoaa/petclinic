@@ -33,7 +33,9 @@ class SpecialtyController(val specialtyService: SpecialtyService) {
             .APPLICATION_JSON_VALUE])
     fun findAll(): Flux<SpecialtyResponse> {
         return specialtyService.findAll()
-                .map { createSpecialtyResponse(it) }
+                .map {
+                    createSpecialtyResponse(it)
+                }
     }
 
     @Operation(summary = "create a specialty", description = "create a specialty if does not exist.")

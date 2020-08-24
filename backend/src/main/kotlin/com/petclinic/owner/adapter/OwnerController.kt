@@ -50,16 +50,7 @@ class OwnerController(val ownerService: OwnerService, val petService: PetService
     @Operation(description = "returns all owners that are available in the system",
             summary = "find all owners")
     @GetMapping(value = ["owners"], produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun findOwners(@RequestParam("include_pets") includePets: Boolean?): Flux<OwnerResponse> {
-        var includePetB = false
-        includePets?.let {
-            includePetB = it
-        }
-
-        if (!includePetB) {
-            return ownerService.findAll()
-                    .map { o -> createOwnerResponse(o) }
-        }
+    fun findOwners(): Flux<OwnerResponse> {
         return ownerService.findAll()
                 .map { o ->
                     val pets = petService.findByOwnerId(o.id!!)
