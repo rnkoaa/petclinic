@@ -1,8 +1,10 @@
 package com.petclinic.vet.service
 
-import com.petclinic.common.adapter.DuplicateKeyException
-import com.petclinic.vet.model.Specialty
+import com.petclinic.vet.repository.SpecialtyByNameRepository
 import com.petclinic.vet.repository.SpecialtyRepository
+import com.petclinic.vet.model.Specialty
+import com.petclinic.vet.model.SpecialtyByName
+import org.springframework.dao.DuplicateKeyException
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -10,13 +12,14 @@ import java.util.*
 
 interface SpecialtyService {
     fun findAll(): Flux<Specialty>
-     fun save(specialty: Specialty): Mono<Specialty>
+    fun save(specialty: Specialty): Mono<Specialty>
     fun findByName(name: String): Mono<Specialty>
 
 }
 
 @Service
-class SpecialtyServiceImpl(val specialtyRepository: SpecialtyRepository) : SpecialtyService {
+class SpecialtyServiceImpl(val specialtyRepository: SpecialtyRepository,
+                           val specialtyByNameRepository: SpecialtyByNameRepository) : SpecialtyService {
     override fun findAll(): Flux<Specialty> {
         return specialtyRepository.findAll()
     }
@@ -36,21 +39,25 @@ class SpecialtyServiceImpl(val specialtyRepository: SpecialtyRepository) : Speci
     }
 
     override fun findByName(name: String): Mono<Specialty> {
-       return specialtyRepository.findByName(name)
+        return specialtyByNameRepository.findByName(name)
+                .map { Specialty(it) }
     }
 
     fun saveSpecialty(specialty: Specialty): Mono<Specialty> {
         // assign id if there is no id for this user.
         val toSave = if (!specialty.isNew()) specialty else specialty.copy(id = UUID.randomUUID())
-        return specialtyRepository.save(toSave)
+
+        return specialtyByNameRepository.save(SpecialtyByName(toSave))
+                .then(specialtyRepository.save(toSave))
     }
 
     fun exists(name: String): Mono<Boolean> {
-       return specialtyRepository.findByName(name)
-               .map {
-                   true
-               }
-               .switchIfEmpty(Mono.just(false))
+        return specialtyByNameRepository.findByName(name)
+                .map {
+                    true
+                }
+                .switchIfEmpty(Mono.just(false))
     }
 
 }
+

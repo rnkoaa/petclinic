@@ -1,6 +1,5 @@
 package com.petclinic.owner.repository
 
-
 import com.petclinic.owner.model.Owner
 import com.petclinic.owner.model.OwnerByTelephone
 import com.petclinic.owner.model.OwnerByTelephoneKey

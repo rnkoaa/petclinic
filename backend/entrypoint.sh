@@ -103,6 +103,8 @@ fi
 export JAVA_OPTS="$JAVA_OPTS"
 echo "[Start Script] Starting app"
 
+export CASSANDRA_BUNDLE_FILE_NAME="/application/$CASSANDRA_BUNDLE_FILE_NAME"
+
 # shellcheck disable=SC2086
 #ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
 #java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /application/bin/app.jar --spring.config.location=classpath:/default.properties,classpath:/application.yml,file:/application/config/application.yml
